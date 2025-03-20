@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318384118670",
+    "project_id": "yayoquest",
+    "storage_bucket": "yayoquest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318384118670:android:c1349ba63f7110174be2df",
+        "android_client_info": {
+          "package_name": "com.example.yayoonline"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlxP9D4T8HMa4DCw9nUdyN7_W_E67V71s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
