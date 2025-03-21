@@ -8,8 +8,10 @@ func _ready():
 	player_id = Firebase.Auth.auth.localid
 	# connect both signals to data_updated instead,
 	# if you don't want to deal with the parsing in new_data_udpate and patch_data_update
+	print("this is ready")
 	db_ref.new_data_update.connect(new_data_updated)
 	db_ref.patch_data_update.connect(patch_data_updated)
+	print("this is ready")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -18,6 +20,7 @@ func _process(delta):
 func data_updated(data):
 	player_status = db_ref.get_data()
 	update_player_list()
+	print("DATA_UPDATED FUNCTION -> i will never run!")
 
 func new_data_updated(data):
 	print("new_data_updated")
@@ -45,8 +48,8 @@ func new_data_updated(data):
 	update_player_list()
 	
 func patch_data_updated(data):
-	print("patch_data_updated")
-	print(data)
+	#print("patch_data_updated")
+	#print(data)
 	
 	if data.key.is_empty():
 		# When a new player is added to the player_status, the data.key will be empty. The actual "player_id" key will be in data.data:
