@@ -10,7 +10,7 @@ func _ready():
 	
 	if Firebase.Auth.check_auth_file():
 		%StateLabel.text = "Logged in"
-		get_tree().change_scene_to_file("res://Game.tscn")
+		get_tree().change_scene_to_file("res://Control.tscn")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,16 +31,16 @@ func _on_signup_button_pressed():
 	%StateLabel.text = "Singing up"
 
 func on_login_succeeded(auth):
-	print(auth)
+	#print(auth)
 	%StateLabel.text = "Login success!"
 	Firebase.Auth.save_auth(auth)
-	get_tree().change_scene_to_file("res://Game.tscn")
+	get_tree().change_scene_to_file("res://Control.tscn")
 	
 func on_signup_succeeded(auth):
-	print(auth)
+	#print(auth)
 	%StateLabel.text = "Sign up success!"
 	Firebase.Auth.save_auth(auth)
-	get_tree().change_scene_to_file("res://Game.tscn")
+	get_tree().change_scene_to_file("res://Control.tscn")
 	
 func on_login_failed(error_code, message):
 	print(error_code)
