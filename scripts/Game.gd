@@ -46,8 +46,11 @@ func _on_ready() -> void:
 
 func _on_leave_room_button_pressed() -> void:
 	#remove player from rooms data
-	gamerooms_ref[player_status[player_id].room].erase(player_id)
+	FirebaseData.trying_shit()
+	print(player_status)
+	print(gamerooms_data)
+	#gamerooms_ref[player_status[player_id].room].players.erase(player_id)
 	#remove player data of rooms and queue
-	db_ref.update(player_id, {'room': null, 'queue': null, 'position': 999})
+	#db_ref.update(player_id, {'room': null, 'queue': null, 'position': 999})
 	#go to control screen
-	get_tree().change_scene_to_file("res://Control.tscn")
+	#get_tree().change_scene_to_file("res://Control.tscn")

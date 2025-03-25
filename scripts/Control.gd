@@ -7,6 +7,9 @@ var db_ref = Firebase.Database.get_database_reference("player_status")
 var gamerooms_ref = Firebase.Database.get_database_reference("game_rooms")
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	FirebaseData.get_firebase_ready()
+	FirebaseData.get_player_id()
+	
 	player_id = Firebase.Auth.auth.localid
 	# connect both signals to data_updated instead,
 	# if you don't want to deal with the parsing in new_data_udpate and patch_data_update
