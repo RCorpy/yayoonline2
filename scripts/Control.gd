@@ -53,7 +53,12 @@ func _on_logout_button_pressed():
 	get_tree().change_scene_to_file("res://Authentication.tscn")
 
 	
-
+func add_player_to_room(room, player):
+	var players_in_room = FirebaseData.gamerooms_data[room].players
+	print("\n players_in_room\n ", players_in_room)
+	players_in_room[FirebaseData.player_id] = "not ready"
+	FirebaseData.gamerooms_ref.update(room, players_in_room)
+	
 
 func calculate_position():
 	if FirebaseData.player_status.has(FirebaseData.player_id) and FirebaseData.player_status[FirebaseData.player_id].has('position') and FirebaseData.player_status[FirebaseData.player_id].position <990:
@@ -79,7 +84,7 @@ func _on_play_solo_button_pressed() -> void:
 	if FirebaseData.gamerooms_data.keys().size() == 1:
 		print("creating room since there are no rooms")
 		var new_room_number = "gameroom1"
-		FirebaseData.gamerooms_ref.update(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
+		add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
 		FirebaseData.player_room = new_room_number
 	#if there are rooms existing, try to join the first one that hasnt got 4 players
 	else:
@@ -89,13 +94,13 @@ func _on_play_solo_button_pressed() -> void:
 				if FirebaseData.gamerooms_data[room].keys().size()<4:
 					print("joining room since we fit", room)
 					room_found = true
-					FirebaseData.gamerooms_ref.update(room, {'players':{FirebaseData.player_id:"not ready"}})
+					add_player_to_room(room, {'players':{FirebaseData.player_id:"not ready"}})
 					FirebaseData.player_room = room
 		#if you still havent found a room, create a new room (maybe they are full and playing already)
 		if not room_found:
-			print("creating room since all other rooms are full")
+			print("creating room since all other rooms are full gameroom", FirebaseData.gamerooms_data)
 			var new_room_number = "gameroom" + str(FirebaseData.gamerooms_data.keys().size())
-			FirebaseData.gamerooms_ref.update(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
+			add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
 			FirebaseData.player_room = new_room_number
 			
 	#go to game
