@@ -113,6 +113,7 @@ offset_bottom = 350.0
 text = "Players' status:
 "
 
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="pressed" from="VBoxContainer/UpdateButton" to="." method="_on_update_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/PlaySoloButton" to="." method="_on_play_solo_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/GroupUpButoon" to="." method="_on_group_up_butoon_pressed"]

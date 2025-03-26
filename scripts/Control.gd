@@ -2,16 +2,14 @@ extends Control
 
 var player_status: Dictionary = {}
 var gamerooms_data: Dictionary = {}
-var player_id = ""
-var db_ref = Firebase.Database.get_database_reference("player_status")
-var gamerooms_ref = Firebase.Database.get_database_reference("game_rooms")
+
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	FirebaseData.db_ref_updated.connect(player_status_updated)
-	FirebaseData.gamerooms_ref_updated.connect(gamerooms_data_updated)
+	FirebaseData.connect("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated"))
+	FirebaseData.connect("db_ref_updated", Callable(self, "_player_status_updated"))
+	FirebaseData.connect("move_to", Callable(self, "_on_move_to"))
 	
 	FirebaseData.get_firebase_ready()
 	FirebaseData.get_player_id()
@@ -25,12 +23,26 @@ func _ready():
 	#gamerooms_ref.new_data_update.connect(gamerooms_data_updated)
 	#gamerooms_ref.patch_data_update.connect(gamerooms_data_updated)
 
-func player_status_updated(data):
+func _on_tree_exited() -> void:
+	if FirebaseData.is_connected("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated")):
+		FirebaseData.disconnect("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated"))
+	if FirebaseData.is_connected("db_ref_updated", Callable(self, "_player_status_updated")):
+		FirebaseData.disconnect("db_ref_updated", Callable(self, "_player_status_updated"))
+	if FirebaseData.is_connected("move_to", Callable(self, "_on_move_to")):
+		FirebaseData.disconnect("move_to", Callable(self, "_on_move_to"))
+		
+func _on_move_to(room):
+	print("signal recieved moving to room", room)
+	if room == "game":
+		go_to_game()
+	FirebaseData.go_to = ""
+
+func _player_status_updated(data):
 	pass
 	#print("player_status_updated")
 	#print(data)
 		
-func gamerooms_data_updated(data):
+func _gamerooms_data_updated(data):
 	FirebaseData.get_player_room()
 	if FirebaseData.player_room != "":
 #			cant access get_tree() yet, so just change button text
@@ -53,11 +65,7 @@ func _on_logout_button_pressed():
 	get_tree().change_scene_to_file("res://Authentication.tscn")
 
 	
-func add_player_to_room(room, player):
-	var players_in_room = FirebaseData.gamerooms_data[room].players
-	print("\n players_in_room\n ", players_in_room)
-	players_in_room[FirebaseData.player_id] = "not ready"
-	FirebaseData.gamerooms_ref.update(room, players_in_room)
+
 	
 
 func calculate_position():
@@ -84,8 +92,8 @@ func _on_play_solo_button_pressed() -> void:
 	if FirebaseData.gamerooms_data.keys().size() == 1:
 		print("creating room since there are no rooms")
 		var new_room_number = "gameroom1"
-		add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
-		FirebaseData.player_room = new_room_number
+		FirebaseData.add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}}, "game")
+		
 	#if there are rooms existing, try to join the first one that hasnt got 4 players
 	else:
 		var room_found = false
@@ -94,19 +102,19 @@ func _on_play_solo_button_pressed() -> void:
 				if FirebaseData.gamerooms_data[room].keys().size()<4:
 					print("joining room since we fit", room)
 					room_found = true
-					add_player_to_room(room, {'players':{FirebaseData.player_id:"not ready"}})
-					FirebaseData.player_room = room
+					FirebaseData.add_player_to_room(room, {'players':{FirebaseData.player_id:"not ready"}},"game")
+					
 		#if you still havent found a room, create a new room (maybe they are full and playing already)
 		if not room_found:
-			print("creating room since all other rooms are full gameroom", FirebaseData.gamerooms_data)
+			print("creating room since all other rooms are full gameroom")
 			var new_room_number = "gameroom" + str(FirebaseData.gamerooms_data.keys().size())
-			add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}})
-			FirebaseData.player_room = new_room_number
+
+			FirebaseData.add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}}, "game")
+			
 			
 	#go to game
 	print("going to game")
 	
-	go_to_game()
 
 
 func create_room():
