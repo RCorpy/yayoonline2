@@ -51,6 +51,7 @@ func _on_leave_room_button_pressed() -> void:
 	#FirebaseData.trying_shit()
 	print(FirebaseData.player_status)
 	print(FirebaseData.gamerooms_data)
+	FirebaseData.remove_player_from_room()
 	#gamerooms_ref[player_status[player_id].room].players.erase(player_id)
 	#remove player data of rooms and queue
 	players=[]

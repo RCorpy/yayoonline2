@@ -16,7 +16,20 @@ signal move_to
 func _ready():
 	pass
 
-
+func _notification(what):
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:  #Both App minimized
+		print("App is going to background, saving data...")
+		#remove player from room
+		#remove_player_from_room()	
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:  # Android User presses back button
+		print("Back button pressed! Saving data...")
+		#remove player from room
+		remove_player_from_room()
+	elif what == NOTIFICATION_WM_CLOSE_REQUEST:  # Windows: Closing window
+		print("Windows: Game is closing! Saving data...")
+		#remove player from room
+		remove_player_from_room()
+		
 func get_firebase_ready():
 	db_ref = Firebase.Database.get_database_reference("player_status")
 	gamerooms_ref = Firebase.Database.get_database_reference("game_rooms")
@@ -49,7 +62,7 @@ func get_player_room():
 		if room != "games_played" and gamerooms_data[room].players.has(player_id):
 			player_room = room
 
-func add_player_to_room(room, player, move):
+func add_player_to_room(room, move):
 	player_room = room
 	go_to = move
 	if gamerooms_data.has(room):
@@ -60,5 +73,16 @@ func add_player_to_room(room, player, move):
 		gamerooms_ref.update(room, {"players" : players_in_room})
 	else:
 		print("creating first player on room")
-		gamerooms_ref.update(room, player)
+		gamerooms_ref.update(room, {'players':{player_id:"not ready"}})
+	
+func remove_player_from_room():
+	if gamerooms_data.has(player_room) and player_room.left(8)  == "gameroom":
+		print("removing player on room", player_room)
+		print("\n", gamerooms_data[player_room].players)
+		var players_in_room = gamerooms_data[player_room].players
+		players_in_room.erase(player_id)
+		print("players_in_room", players_in_room)
+		#gamerooms_ref.update(player_room, {"players" : players_in_room})	
+	player_room = ""
+	#emit_signal("gamerooms_ref_updated", gamerooms_data)
 	

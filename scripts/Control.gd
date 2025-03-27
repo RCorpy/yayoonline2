@@ -60,8 +60,9 @@ func _on_update_button_pressed():
 
 func _on_logout_button_pressed():
 	Firebase.Auth.logout()
-	FirebaseData.player_room = ""
+	FirebaseData.remove_player_from_room()
 	FirebaseData.player_id = ""
+	
 	get_tree().change_scene_to_file("res://Authentication.tscn")
 
 	
@@ -92,7 +93,7 @@ func _on_play_solo_button_pressed() -> void:
 	if FirebaseData.gamerooms_data.keys().size() == 1:
 		print("creating room since there are no rooms")
 		var new_room_number = "gameroom1"
-		FirebaseData.add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}}, "game")
+		FirebaseData.add_player_to_room(new_room_number, "game")
 		
 	#if there are rooms existing, try to join the first one that hasnt got 4 players
 	else:
@@ -102,14 +103,14 @@ func _on_play_solo_button_pressed() -> void:
 				if FirebaseData.gamerooms_data[room].keys().size()<4:
 					print("joining room since we fit", room)
 					room_found = true
-					FirebaseData.add_player_to_room(room, {'players':{FirebaseData.player_id:"not ready"}},"game")
+					FirebaseData.add_player_to_room(room,"game")
 					
 		#if you still havent found a room, create a new room (maybe they are full and playing already)
 		if not room_found:
 			print("creating room since all other rooms are full gameroom")
 			var new_room_number = "gameroom" + str(FirebaseData.gamerooms_data.keys().size())
 
-			FirebaseData.add_player_to_room(new_room_number, {'players':{FirebaseData.player_id:"not ready"}}, "game")
+			FirebaseData.add_player_to_room(new_room_number, "game")
 			
 			
 	#go to game
