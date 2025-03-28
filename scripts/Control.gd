@@ -10,9 +10,10 @@ func _ready():
 	FirebaseData.connect("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated"))
 	FirebaseData.connect("db_ref_updated", Callable(self, "_player_status_updated"))
 	FirebaseData.connect("move_to", Callable(self, "_on_move_to"))
-	
-	FirebaseData.get_firebase_ready()
 	FirebaseData.get_player_id()
+	if gamerooms_data.is_empty():
+		FirebaseData.get_firebase_ready()
+		
 	
 	
 	#player_id = Firebase.Auth.auth.localid
@@ -89,6 +90,9 @@ func _on_play_solo_button_pressed() -> void:
 			
 	#get all rooms and see the first one that fits (getting the data automatic in gamerooms_data_updated)
 	
+	#if we find 0 the program didnt load the dictionaries, it should, we disconnect for now to avoid errors
+	if FirebaseData.gamerooms_data.keys().size() == 0:
+		_on_logout_button_pressed()
 	#create room if there are no rooms
 	if FirebaseData.gamerooms_data.keys().size() == 1:
 		print("creating room since there are no rooms")
@@ -109,7 +113,7 @@ func _on_play_solo_button_pressed() -> void:
 		if not room_found:
 			print("creating room since all other rooms are full gameroom")
 			var new_room_number = "gameroom" + str(FirebaseData.gamerooms_data.keys().size())
-
+			
 			FirebaseData.add_player_to_room(new_room_number, "game")
 			
 			

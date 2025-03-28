@@ -8,6 +8,7 @@ func _ready():
 	Firebase.Auth.login_failed.connect(on_login_failed)
 	Firebase.Auth.signup_failed.connect(on_signup_failed)
 	
+	#this will make us stay connected but it gives some errors
 	if Firebase.Auth.check_auth_file():
 		%StateLabel.text = "Logged in"
 		get_tree().change_scene_to_file("res://Control.tscn")

@@ -10,7 +10,7 @@ func _on_ready() -> void:
 	FirebaseData.connect("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated"))
 	
 	#get game room, checking if you are in group
-	if FirebaseData.player_room == "":
+	if not FirebaseData.gamerooms_data.has(FirebaseData.player_room):
 		print("game not found ", FirebaseData.player_room)
 		get_tree().change_scene_to_file("res://Control.tscn")
 	else:
@@ -27,10 +27,13 @@ func _on_ready() -> void:
 	
 func _gamerooms_data_updated(data):
 	players = []
-	for player in FirebaseData.gamerooms_data[FirebaseData.player_room].players.keys():
-		players.append(player)
-	print("show_players updated")
-	show_players()
+	if FirebaseData.gamerooms_data.has(FirebaseData.player_room):
+		for player in FirebaseData.gamerooms_data[FirebaseData.player_room].players.keys():
+			players.append(player)
+		print("show_players updated")
+		show_players()
+	else:
+		FirebaseData.player_room = ""
 
 func show_players():
 	var TextEditText = "Game Room \n Players:\n"
