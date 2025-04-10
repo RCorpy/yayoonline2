@@ -5,19 +5,22 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_wbfu4")
 
-[node name="TextEdit" type="TextEdit" parent="."]
-offset_left = 266.0
-offset_top = 111.0
-offset_right = 829.0
-offset_bottom = 292.0
+[node name="Container" type="Container" parent="."]
+offset_right = 1151.0
+offset_bottom = 647.0
+
+[node name="TextEdit" type="TextEdit" parent="Container"]
+layout_mode = 2
 text = "GAME"
 
-[node name="LeaveRoomButton" type="Button" parent="."]
-offset_left = 484.0
-offset_top = 352.0
-offset_right = 594.0
-offset_bottom = 383.0
+[node name="LeaveRoomButton" type="Button" parent="Container"]
+layout_mode = 2
 text = "LEAVE ROOM"
 
+[node name="Button" type="Button" parent="Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Ready"
+
 [connection signal="ready" from="." to="." method="_on_ready"]
-[connection signal="pressed" from="LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]
+[connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]
