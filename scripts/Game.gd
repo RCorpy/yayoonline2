@@ -39,7 +39,23 @@ func show_players():
 	var TextEditText = "Game Room \n Players:\n"
 	for player in players:
 		TextEditText+=(player+"\n")
-	$TextEdit.text = TextEditText
+	$Container/TextEdit.text = TextEditText
+	if players.size()>3:
+		$Container/ReadyButton.disabled = false
+		$Container/ReadyButton.visible = true
+		$Timer.start()
+
+func _on_timer_timeout():
+	#check if any player is not ready
+	
+	#kick non-ready players
+	
+	#set players to non-ready
+	
+	#hide readybutton
+	$Container/ReadyButton.visible = false
+	$Container/ReadyButton.disabled = true
+	pass # Replace with function body.
 
 func on_game_start():
 	pass
@@ -61,3 +77,9 @@ func _on_leave_room_button_pressed() -> void:
 	#db_ref.update(player_id, {'room': null, 'queue': null, 'position': 999})
 	#go to control screen
 	get_tree().change_scene_to_file("res://Control.tscn")
+
+
+func _on_ready_button_pressed():
+	print("readybutton pressed")
+	#send signal to agree to readycheck
+	$Container/ReadyButton.disabled = true
