@@ -90,19 +90,28 @@ func remove_player_from_room():
 		print("removing player on room", player_room)
 		print("\n", gamerooms_data[player_room].players)
 		var players_in_room = gamerooms_data[player_room].players
-		players_in_room.erase(player_id)
+		#players_in_room.erase(player_id)
+		for player in players_in_room:
+			players_in_room[player].ready = false
+		players_in_room[player_id] = null
 		print("players_in_room", players_in_room)
-		if players_in_room.is_empty():
+		if players_in_room.keys().size()<=1:
 			print("empty!, removing room")
 			erase_room(player_room)
 		else:
 			print("not empty! removing ", player_id)
 			var path = player_room + "/players"
-			gamerooms_ref.update(path, {player_id : null})
+			gamerooms_ref.update(path, players_in_room)
+			#gamerooms_ref.update(path, {player: null})
 	player_room = ""
 	print("emiting signal", gamerooms_data)
 	emit_signal("gamerooms_ref_updated", gamerooms_data)
-	
+
+func player_is_ready(player):
+	if gamerooms_data.has(player_room) and player_room.left(8)  == "gameroom":
+		var path = player_room + "/players"
+		gamerooms_ref.update(path, {player: "ready"})
+		
 func erase_room(room):
 	gamerooms_ref.delete(room)
 	#emit_signal("gamerooms_ref_updated", gamerooms_data)

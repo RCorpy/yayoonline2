@@ -41,21 +41,27 @@ func show_players():
 		TextEditText+=(player+"\n")
 	$Container/TextEdit.text = TextEditText
 	if players.size()>3:
+		if players.size()>4:
+			print("mas de 4 jugadores, nos hemos pasado")
 		$Container/ReadyButton.disabled = false
 		$Container/ReadyButton.visible = true
 		$Timer.start()
 
+	else: 
+		$Container/ReadyButton.visible = false
+		$Container/ReadyButton.disabled = true
+
 func _on_timer_timeout():
-	#check if any player is not ready
-	
-	#kick non-ready players
-	
+	#check if player is not ready
+	if $Container/ReadyButton.disabled:
+		$Container/ReadyButton.visible = false
+		$Container/ReadyButton.disabled = true
+	else:
+		#kick non-ready players
+		_on_leave_room_button_pressed()
+
 	#set players to non-ready
 	
-	#hide readybutton
-	$Container/ReadyButton.visible = false
-	$Container/ReadyButton.disabled = true
-	pass # Replace with function body.
 
 func on_game_start():
 	pass
@@ -82,4 +88,6 @@ func _on_leave_room_button_pressed() -> void:
 func _on_ready_button_pressed():
 	print("readybutton pressed")
 	#send signal to agree to readycheck
+	
+	
 	$Container/ReadyButton.disabled = true
