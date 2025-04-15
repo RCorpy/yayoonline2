@@ -26,11 +26,13 @@ func _on_ready() -> void:
 	#if players == 4 do a readycheck
 	
 func _gamerooms_data_updated(data):
+	#maybe we need to stop the timer sometimes
 	players = []
 	if FirebaseData.gamerooms_data.has(FirebaseData.player_room):
+		print("HERE", FirebaseData.gamerooms_data[FirebaseData.player_room])
 		for player in FirebaseData.gamerooms_data[FirebaseData.player_room].players.keys():
 			players.append(player)
-		print("show_players updated")
+		#print("show_players updated")
 		show_players()
 	else:
 		FirebaseData.player_room = ""
@@ -53,7 +55,11 @@ func show_players():
 
 func _on_timer_timeout():
 	#check if player is not ready
-	if $Container/ReadyButton.disabled:
+	print(FirebaseData.gamerooms_data)
+	print(FirebaseData.player_room)
+	print(FirebaseData.player_id)
+	if FirebaseData.gamerooms_data[FirebaseData.player_room].players[FirebaseData.player_id] != "ready":
+		FirebaseData.kick_non_ready_players_and_reset_readys()
 		$Container/ReadyButton.visible = false
 		$Container/ReadyButton.disabled = true
 	else:
@@ -86,8 +92,8 @@ func _on_leave_room_button_pressed() -> void:
 
 
 func _on_ready_button_pressed():
-	print("readybutton pressed")
+	#print("readybutton pressed")
 	#send signal to agree to readycheck
-	
+	FirebaseData.player_is_ready()
 	
 	$Container/ReadyButton.disabled = true

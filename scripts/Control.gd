@@ -82,8 +82,8 @@ func calculate_position():
 func _on_play_solo_button_pressed() -> void:
 	#get into qeue
 	
-	#Are we already on a room?
-	if FirebaseData.player_room != "":
+	#Are we already on a room? # check if the room has the player too
+	if FirebaseData.player_room != "" and FirebaseData.gamerooms_data[FirebaseData.player_room]:
 		print("going to my game")
 		go_to_game()
 		return
