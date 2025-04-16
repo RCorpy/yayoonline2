@@ -30,8 +30,7 @@ func _gamerooms_data_updated(data):
 		#print("show_players updated")
 		show_players()
 	else:
-		FirebaseData.player_room = ""
-		get_tree().change_scene_to_file("res://Control.tscn")
+		_on_leave_room_button_pressed()
 
 func show_players():
 	var TextEditText = "Game Room \n Players:\n"
@@ -76,6 +75,7 @@ func _on_leave_room_button_pressed() -> void:
 	players={}
 	#db_ref.update(player_id, {'room': null, 'queue': null, 'position': 999})
 	#go to control screen
+	FirebaseData.player_room = ""
 	get_tree().change_scene_to_file("res://Control.tscn")
 
 
