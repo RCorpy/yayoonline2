@@ -7,6 +7,7 @@ var gamerooms_data: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	FirebaseData.playing_IA = false
 	FirebaseData.connect("gamerooms_ref_updated", Callable(self, "_gamerooms_data_updated"))
 	FirebaseData.connect("db_ref_updated", Callable(self, "_player_status_updated"))
 	FirebaseData.connect("move_to", Callable(self, "_on_move_to"))
@@ -135,9 +136,9 @@ func _on_tutorial_pressed() -> void:
 	pass # Replace with function body.
 
 
-func _on_button_pressed() -> void:
-	#get_tree().change_scene_to_file("res://Game.tscn")
-	pass # Replace with function body.
+func _on_play_ia_pressed():
+	FirebaseData.playing_IA = true
+	get_tree().change_scene_to_file("res://Game.tscn")
 
 
 #func new_data_updated(data):
@@ -190,3 +191,6 @@ func _on_button_pressed() -> void:
 #				player_status[path[0]] = data.data
 #			
 #	update_player_list()
+
+
+

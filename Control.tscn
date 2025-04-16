@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cr8xh3kc8woma"]
 
-[ext_resource type="Script" uid="uid://iw2fqlmam0ly" path="res://scripts/Control.gd" id="1_iljke"]
+[ext_resource type="Script" path="res://scripts/Control.gd" id="1_iljke"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -89,7 +89,7 @@ theme_override_font_sizes/font_size = 34
 text = "Tutorial
 "
 
-[node name="Button" type="Button" parent="VBoxContainer2"]
+[node name="PlayIA" type="Button" parent="VBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "Play vs IA"
@@ -118,5 +118,5 @@ text = "Players' status:
 [connection signal="pressed" from="VBoxContainer2/PlaySoloButton" to="." method="_on_play_solo_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/GroupUpButoon" to="." method="_on_group_up_butoon_pressed"]
 [connection signal="pressed" from="VBoxContainer2/Tutorial" to="." method="_on_tutorial_pressed"]
-[connection signal="pressed" from="VBoxContainer2/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer2/PlayIA" to="." method="_on_play_ia_pressed"]
 [connection signal="pressed" from="LogoutButton" to="." method="_on_logout_button_pressed"]

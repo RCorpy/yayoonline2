@@ -8,6 +8,7 @@ var db_ref
 var gamerooms_ref
 var go_to = ""
 
+var playing_IA = false
 
 signal db_ref_updated
 signal gamerooms_ref_updated
@@ -89,9 +90,13 @@ func add_player_to_room(room, move):
 		players_in_room[player_id] = "not ready"
 		gamerooms_ref.update(room, {"players" : players_in_room})
 	else:
-		#print("creating first player on room")
-		#print("room and player_id", room, player_id)
-		gamerooms_ref.update(room, {'players':{player_id:"not ready"}})
+		print("creating first player on room")
+		print("room and player_id", room, player_id)
+		gamerooms_ref.update(room, 
+		{
+			'players':{player_id:{"ready":"not ready"}},
+			'gamerunning':false
+		})
 	
 func remove_player_from_room():
 	if gamerooms_data.has(player_room) and player_room.left(8)  == "gameroom":
@@ -101,7 +106,7 @@ func remove_player_from_room():
 		#players_in_room.erase(player_id)
 		#print("players_in_room: ", players_in_room)
 		for player in players_in_room.keys():
-			players_in_room[player] = "not ready"
+			players_in_room[player].ready = "not ready"
 		players_in_room[player_id] = null
 		#print("players_in_room", players_in_room)
 		if players_in_room.keys().size()<=1:
@@ -119,8 +124,8 @@ func remove_player_from_room():
 
 func player_is_ready():
 	if gamerooms_data.has(player_room) and player_room.left(8)  == "gameroom":
-		var path = player_room + "/players"
-		gamerooms_ref.update(path, {player_id: "ready"})
+		var path = player_room + "/players/" + player_id 
+		gamerooms_ref.update(path, {ready: "ready"})
 		
 func erase_room(room):
 	#maybe it erases all rooms :V
@@ -130,11 +135,11 @@ func erase_room(room):
 func kick_non_ready_players_and_reset_readys():
 	var new_room = {}
 	for player in gamerooms_data[player_room].players.keys():
-		print("PLAYER READY?", gamerooms_data[player_room].players[player])
-		if gamerooms_data[player_room].players[player] != "ready":
+		if gamerooms_data[player_room].players[player].ready != "ready":
 			new_room[player] = null
 		else:
-			new_room[player] = "not ready"	
+			new_room[player] = gamerooms_data[player_room].players[player]
+			new_room[player].ready = "not ready"	
 	var path = player_room + "/players"
 	print("new room: ", new_room)
 	gamerooms_ref.update(path, new_room)
