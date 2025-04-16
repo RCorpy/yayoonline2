@@ -1,6 +1,6 @@
 extends Node2D
 
-var players = []
+var players = {}
 
 
 
@@ -15,9 +15,7 @@ func _on_ready() -> void:
 		get_tree().change_scene_to_file("res://Control.tscn")
 	else:
 		print("joining room ", FirebaseData.player_room)
-	players = []
-	for player in FirebaseData.gamerooms_data[FirebaseData.player_room].players.keys():
-		players.append(player)
+		players = FirebaseData.gamerooms_data[FirebaseData.player_room].players
 	#load the existing players
 	print("updating players because on ready")
 	show_players()
@@ -26,24 +24,22 @@ func _on_ready() -> void:
 	#if players == 4 do a readycheck
 	
 func _gamerooms_data_updated(data):
-	#maybe we need to stop the timer sometimes
-	players = []
+	#maybe we need to stop the timer sometimes	
 	if FirebaseData.gamerooms_data.has(FirebaseData.player_room):
-		print("HERE", FirebaseData.gamerooms_data[FirebaseData.player_room])
-		for player in FirebaseData.gamerooms_data[FirebaseData.player_room].players.keys():
-			players.append(player)
+		players = FirebaseData.gamerooms_data[FirebaseData.player_room].players
 		#print("show_players updated")
 		show_players()
 	else:
 		FirebaseData.player_room = ""
+		get_tree().change_scene_to_file("res://Control.tscn")
 
 func show_players():
 	var TextEditText = "Game Room \n Players:\n"
-	for player in players:
+	for player in players.keys():
 		TextEditText+=(player+"\n")
 	$Container/TextEdit.text = TextEditText
-	if players.size()>3:
-		if players.size()>4:
+	if players.keys().size()>3:
+		if players.keys().size()>4:
 			print("mas de 4 jugadores, nos hemos pasado")
 		$Container/ReadyButton.disabled = false
 		$Container/ReadyButton.visible = true
@@ -52,23 +48,15 @@ func show_players():
 	else: 
 		$Container/ReadyButton.visible = false
 		$Container/ReadyButton.disabled = true
+		$Container/KickNotReady.visible = false
+		$Container/KickNotReady.disabled = true
 
 func _on_timer_timeout():
-	#check if player is not ready
-	print(FirebaseData.gamerooms_data)
-	print(FirebaseData.player_room)
-	print(FirebaseData.player_id)
-	if FirebaseData.gamerooms_data[FirebaseData.player_room].players[FirebaseData.player_id] != "ready":
-		FirebaseData.kick_non_ready_players_and_reset_readys()
-		$Container/ReadyButton.visible = false
-		$Container/ReadyButton.disabled = true
-	else:
-		#kick non-ready players
-		_on_leave_room_button_pressed()
-
-	#set players to non-ready
+	#Allow votekick
+	if $Container/ReadyButton.disabled:
+		$Container/KickNotReady.visible = true
+		$Container/KickNotReady.disabled = false
 	
-
 func on_game_start():
 	pass
 	#give turn order
@@ -85,7 +73,7 @@ func _on_leave_room_button_pressed() -> void:
 	FirebaseData.remove_player_from_room()
 	#gamerooms_ref[player_status[player_id].room].players.erase(player_id)
 	#remove player data of rooms and queue
-	players=[]
+	players={}
 	#db_ref.update(player_id, {'room': null, 'queue': null, 'position': 999})
 	#go to control screen
 	get_tree().change_scene_to_file("res://Control.tscn")
@@ -97,3 +85,11 @@ func _on_ready_button_pressed():
 	FirebaseData.player_is_ready()
 	
 	$Container/ReadyButton.disabled = true
+
+
+func _on_kick_not_ready_pressed():
+	FirebaseData.kick_non_ready_players_and_reset_readys()
+	$Container/ReadyButton.visible = false
+	$Container/ReadyButton.disabled = true
+	$Container/KickNotReady.visible = false
+	$Container/KickNotReady.disabled = true

@@ -46,7 +46,7 @@ func player_status_data_updated(data):
 	player_status = db_ref.get_data()
 	#db_ref_updated.emit(player_status)
 	emit_signal("db_ref_updated", player_status)
-	#print("player_status updated")
+	#print("player_status updated", player_status)
 		
 func gamerooms_data_updated(data):
 	var path = data.key.split("/", true)
@@ -57,7 +57,10 @@ func gamerooms_data_updated(data):
 				print("path[0]", path[0], "path[1]", path[1], "value", value)
 				gamerooms_data[path[0]][path[1]].erase(value)
 			else:
-				gamerooms_data[path[0]][path[1]] = value
+				print("VALUE, ", value)
+
+				gamerooms_data[path[0]][path[1]][value] = data.data[value]
+		print("gamerooms_data", gamerooms_data)
 		emit_signal("gamerooms_ref_updated", gamerooms_data)
 	elif data.data == null:
 		gamerooms_data.erase(data.key)
@@ -68,7 +71,7 @@ func gamerooms_data_updated(data):
 		emit_signal("gamerooms_ref_updated", gamerooms_data)
 		if go_to != "":
 			emit_signal("move_to", go_to)
-	#print("gamerooms_data updated")
+	print("gamerooms_data updated", gamerooms_data)
 
 
 func get_player_room():
@@ -97,13 +100,14 @@ func remove_player_from_room():
 		var players_in_room = gamerooms_data[player_room].players
 		#players_in_room.erase(player_id)
 		#print("players_in_room: ", players_in_room)
-		for player in players_in_room:
+		for player in players_in_room.keys():
 			players_in_room[player] = "not ready"
 		players_in_room[player_id] = null
 		#print("players_in_room", players_in_room)
 		if players_in_room.keys().size()<=1:
 			#print("empty!, removing room")
 			erase_room(player_room)
+			
 		else:
 			#print("not empty! removing ", player_id)
 			var path = player_room + "/players"
@@ -130,8 +134,11 @@ func kick_non_ready_players_and_reset_readys():
 		if gamerooms_data[player_room].players[player] != "ready":
 			new_room[player] = null
 		else:
-			new_room[player] = "not ready"
-			
+			new_room[player] = "not ready"	
 	var path = player_room + "/players"
 	print("new room: ", new_room)
 	gamerooms_ref.update(path, new_room)
+	emit_signal("gamerooms_ref_updated", gamerooms_data)
+
+func check_players_in_room(room):
+	var players = {}

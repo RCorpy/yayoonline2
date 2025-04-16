@@ -15,8 +15,8 @@ func _ready():
 		FirebaseData.get_firebase_ready()
 		
 	
-	
-	#player_id = Firebase.Auth.auth.localid
+	if Firebase.Auth.check_auth_file():
+		FirebaseData.player_id = Firebase.Auth.auth.localid
 	# connect both signals to data_updated instead,
 	# if you don't want to deal with the parsing in new_data_udpate and patch_data_update
 	#db_ref.new_data_update.connect(new_data_updated)
@@ -62,7 +62,7 @@ func _on_update_button_pressed():
 func _on_logout_button_pressed():
 	Firebase.Auth.logout()
 	FirebaseData.remove_player_from_room()
-	FirebaseData.player_id = ""
+	
 	
 	get_tree().change_scene_to_file("res://Authentication.tscn")
 

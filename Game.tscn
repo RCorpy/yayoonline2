@@ -42,10 +42,20 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wbfu4")
 disabled = true
 text = "Ready"
 
+[node name="KickNotReady" type="Button" parent="Container"]
+visible = false
+offset_left = 506.0
+offset_top = 443.0
+offset_right = 636.0
+offset_bottom = 479.0
+text = "Kick AFKs"
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 20.0
+one_shot = true
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]
 [connection signal="pressed" from="Container/ReadyButton" to="." method="_on_ready_button_pressed"]
+[connection signal="pressed" from="Container/KickNotReady" to="." method="_on_kick_not_ready_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
