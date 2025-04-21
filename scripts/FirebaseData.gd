@@ -7,8 +7,8 @@ var player_room = ""
 var db_ref
 var gamerooms_ref
 var go_to = ""
-
 var playing_IA = false
+var game_info: Dictionary = {}
 
 signal db_ref_updated
 signal gamerooms_ref_updated
