@@ -191,6 +191,3 @@ func _on_play_ia_pressed():
 #				player_status[path[0]] = data.data
 #			
 #	update_player_list()
-
-
-

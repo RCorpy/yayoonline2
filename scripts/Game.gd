@@ -41,6 +41,7 @@ func _gamerooms_data_updated(data):
 
 func show_players():
 	var TextEditText = "Game Room \n Players:\n"
+	var all_ready = true
 	if FirebaseData.playing_IA:
 		for player in players.keys():
 			TextEditText+=player
@@ -48,6 +49,7 @@ func show_players():
 				TextEditText+=" V"+"\n"
 			else:
 				TextEditText+=" X"+"\n"
+				all_ready = false
 	else:
 		for player in players.keys():
 			TextEditText+=(FirebaseData.player_status[player].name)
@@ -55,8 +57,11 @@ func show_players():
 				TextEditText+=" V"+"\n"
 			else:
 				TextEditText+=" X"+"\n"
+				all_ready = false
 	$Container/TextEdit.text = TextEditText
-	
+	if all_ready:
+		start_board()
+		
 	
 	if players.keys().size()>3:
 		if players.keys().size()>4:
@@ -70,6 +75,9 @@ func show_players():
 		$Container/ReadyButton.disabled = true
 		$Container/KickNotReady.visible = false
 		$Container/KickNotReady.disabled = true
+
+func start_board():
+	print("started board")
 
 func _on_timer_timeout():
 	#Allow votekick
