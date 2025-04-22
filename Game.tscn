@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://wxqii62b2lng"]
+[gd_scene load_steps=6 format=3 uid="uid://wxqii62b2lng"]
 
 [ext_resource type="Script" uid="uid://d255l710kfrff" path="res://scripts/Game.gd" id="1_wbfu4"]
+[ext_resource type="Script" uid="uid://b1dglrptag18y" path="res://CardManager.gd" id="2_u44n3"]
 [ext_resource type="PackedScene" uid="uid://dvb6b6jok0bqq" path="res://Card.tscn" id="2_xkndl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkndl"]
@@ -20,7 +21,6 @@ offset_bottom = 65.0
 text = "Sample Text"
 
 [node name="Container" type="Node2D" parent="."]
-visible = false
 
 [node name="TextEdit" type="TextEdit" parent="Container"]
 offset_left = 356.0
@@ -65,7 +65,14 @@ one_shot = true
 
 [node name="GameContainer" type="Node2D" parent="."]
 
-[node name="Card" parent="GameContainer" instance=ExtResource("2_xkndl")]
+[node name="CardManager" type="Node2D" parent="GameContainer"]
+script = ExtResource("2_u44n3")
+
+[node name="Card" parent="GameContainer/CardManager" instance=ExtResource("2_xkndl")]
+position = Vector2(219, 316)
+
+[node name="Card2" parent="GameContainer/CardManager" instance=ExtResource("2_xkndl")]
+position = Vector2(140, 298)
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]

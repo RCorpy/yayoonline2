@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dvb6b6jok0bqq"]
+[gd_scene load_steps=4 format=3 uid="uid://dvb6b6jok0bqq"]
 
 [ext_resource type="Texture2D" uid="uid://cpemlxdjlu5xp" path="res://assets/FlameDemon.png" id="1_dd2wi"]
+[ext_resource type="Script" uid="uid://c4dttjl5pxh5n" path="res://Card.gd" id="1_hael8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hael8"]
 size = Vector2(60, 64)
 
 [node name="Card" type="Node2D"]
+script = ExtResource("1_hael8")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_dd2wi")
@@ -15,3 +17,6 @@ texture = ExtResource("1_dd2wi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_hael8")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
