@@ -1,0 +1,88 @@
+[gd_scene load_steps=8 format=3 uid="uid://wxqii62b2lng"]
+
+[ext_resource type="Script" uid="uid://d255l710kfrff" path="res://scripts/Game.gd" id="1_wbfu4"]
+[ext_resource type="Script" uid="uid://b1dglrptag18y" path="res://CardManager.gd" id="2_u44n3"]
+[ext_resource type="PackedScene" uid="uid://ebg38f5q7tdl" path="res://scenes/CardSlot.tscn" id="4_sb48q"]
+[ext_resource type="Script" uid="uid://cmewxew0rcn8y" path="res://PlayerHand.gd" id="5_r0x5m"]
+[ext_resource type="Script" uid="uid://kouf04ht4v6n" path="res://CardSlot.gd" id="5_t88pq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkndl"]
+bg_color = Color(0.202795, 0.719399, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbfu4"]
+bg_color = Color(0.85006, 0.503213, 0.174839, 1)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_wbfu4")
+
+[node name="NameText" type="TextEdit" parent="."]
+offset_left = 45.0
+offset_top = 23.0
+offset_right = 232.0
+offset_bottom = 65.0
+text = "Sample Text"
+
+[node name="Container" type="Node2D" parent="."]
+visible = false
+
+[node name="TextEdit" type="TextEdit" parent="Container"]
+offset_left = 356.0
+offset_top = 158.0
+offset_right = 765.0
+offset_bottom = 322.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "GAME"
+
+[node name="LeaveRoomButton" type="Button" parent="Container"]
+offset_left = 515.0
+offset_top = 357.0
+offset_right = 625.0
+offset_bottom = 388.0
+text = "LEAVE ROOM"
+
+[node name="ReadyButton" type="Button" parent="Container"]
+visible = false
+offset_left = 508.0
+offset_top = 400.0
+offset_right = 635.0
+offset_bottom = 431.0
+size_flags_horizontal = 4
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_styles/disabled = SubResource("StyleBoxFlat_xkndl")
+theme_override_styles/normal = SubResource("StyleBoxFlat_wbfu4")
+disabled = true
+text = "Ready"
+
+[node name="KickNotReady" type="Button" parent="Container"]
+visible = false
+offset_left = 506.0
+offset_top = 443.0
+offset_right = 636.0
+offset_bottom = 479.0
+text = "Kick AFKs"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 20.0
+one_shot = true
+
+[node name="GameContainer" type="Node2D" parent="."]
+
+[node name="CardManager" type="Node2D" parent="GameContainer"]
+script = ExtResource("2_u44n3")
+
+[node name="CardSlot" parent="GameContainer" instance=ExtResource("4_sb48q")]
+position = Vector2(418, 401)
+script = ExtResource("5_t88pq")
+
+[node name="CardSlot2" parent="GameContainer" instance=ExtResource("4_sb48q")]
+position = Vector2(610, 400)
+
+[node name="PlayerHand" type="Node2D" parent="GameContainer"]
+script = ExtResource("5_r0x5m")
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]
+[connection signal="pressed" from="Container/ReadyButton" to="." method="_on_ready_button_pressed"]
+[connection signal="pressed" from="Container/KickNotReady" to="." method="_on_kick_not_ready_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

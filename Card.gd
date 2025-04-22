@@ -3,6 +3,8 @@ extends Node2D
 signal hovered
 signal hovered_off
 
+var card_position
+
 func _ready():
 	get_parent().connect_card_signals(self)
 

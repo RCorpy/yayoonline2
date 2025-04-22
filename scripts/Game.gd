@@ -26,7 +26,7 @@ func _on_ready() -> void:
 			#get game room, checking if you are in group
 			if not FirebaseData.gamerooms_data.has(FirebaseData.player_room):
 				print("game not found ", FirebaseData.player_room)
-				get_tree().change_scene_to_file("res://Control.tscn")
+				get_tree().change_scene_to_file("res://scenes/Control.tscn")
 			else:
 				print("joining room ", FirebaseData.player_room)
 				players = FirebaseData.gamerooms_data[FirebaseData.player_room].players
@@ -43,7 +43,7 @@ func _gamerooms_data_updated(data):
 		#print("show_players updated")
 		show_players()
 	else:
-		get_tree().change_scene_to_file("res://Control.tscn")
+		get_tree().change_scene_to_file("res://scenes/Control.tscn")
 
 func show_players():
 	var TextEditText = "Game Room \n Players:\n"
@@ -166,7 +166,7 @@ func _on_leave_room_button_pressed() -> void:
 	#go to control screen
 	FirebaseData.player_room = ""
 	if get_tree():
-		get_tree().change_scene_to_file("res://Control.tscn")
+		get_tree().change_scene_to_file("res://scenes/Control.tscn")
 
 func _on_ready_button_pressed():
 	#print("readybutton pressed")

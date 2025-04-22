@@ -52,7 +52,7 @@ func _gamerooms_data_updated(data):
 
 	
 func go_to_game():
-	get_tree().change_scene_to_file("res://Game.tscn")
+	get_tree().change_scene_to_file("res://scenes/Game.tscn")
 
 
 
@@ -65,7 +65,7 @@ func _on_logout_button_pressed():
 	FirebaseData.remove_player_from_room()
 	
 	
-	get_tree().change_scene_to_file("res://Authentication.tscn")
+	get_tree().change_scene_to_file("res://scenes/Authentication.tscn")
 
 	
 
@@ -127,18 +127,18 @@ func create_room():
 	pass
 
 func _on_group_up_butoon_pressed() -> void:
-	##get_tree().change_scene_to_file("res://GroupUp.tscn")
+	##get_tree().change_scene_to_file("res://scenes/GroupUp.tscn")
 	pass # Replace with function body.
 
 
 func _on_tutorial_pressed() -> void:
-	#get_tree().change_scene_to_file("res://Game.tscn")
+	#get_tree().change_scene_to_file("res://scenes/Game.tscn")
 	pass # Replace with function body.
 
 
 func _on_play_ia_pressed():
 	FirebaseData.playing_IA = true
-	get_tree().change_scene_to_file("res://Game.tscn")
+	get_tree().change_scene_to_file("res://scenes/Game.tscn")
 
 
 #func new_data_updated(data):

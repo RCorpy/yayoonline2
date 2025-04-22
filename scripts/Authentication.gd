@@ -11,7 +11,7 @@ func _ready():
 	#this will make us stay connected but it gives some errors
 	if Firebase.Auth.check_auth_file():
 		%StateLabel.text = "Logged in"
-		get_tree().change_scene_to_file("res://Control.tscn")
+		get_tree().change_scene_to_file("res://scenes/Control.tscn")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,13 +35,13 @@ func on_login_succeeded(auth):
 	#print(auth)
 	%StateLabel.text = "Login success!"
 	Firebase.Auth.save_auth(auth)
-	get_tree().change_scene_to_file("res://Control.tscn")
+	get_tree().change_scene_to_file("res://scenes/Control.tscn")
 	
 func on_signup_succeeded(auth):
 	#print(auth)
 	%StateLabel.text = "Sign up success!"
 	Firebase.Auth.save_auth(auth)
-	get_tree().change_scene_to_file("res://Control.tscn")
+	get_tree().change_scene_to_file("res://scenes/Control.tscn")
 	
 func on_login_failed(error_code, message):
 	print(error_code)
