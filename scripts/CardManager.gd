@@ -1,49 +1,50 @@
 extends Node2D
 
-const COLLISION_MASK_CARD = 1
-const COLLISION_MASK_CARD_SLOT = 2
+const FINISH_DRAG_SPEED = 0.4
 const MAX_CARDS_IN_SLOT = 1
+const COLLISION_MASK_CARD_SLOT = 2
 
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
 var player_hand_reference
 
+
 func _ready():
 	screen_size = get_viewport_rect().size
 	player_hand_reference = $"../PlayerHand"
+	$"../InputManager".connect("left_mouse_button_released", on_left_click_release)
+
 
 func _process(delta):
 	if card_being_dragged:
 		var mouse_position = get_global_mouse_position()
-		card_being_dragged.position = Vector2(clamp(mouse_position.x, 0, screen_size.x), clamp(mouse_position.y, 0, screen_size.y))
+		card_being_dragged.position = Vector2(
+			clamp(mouse_position.x, 0, screen_size.x), 
+			clamp(mouse_position.y, 0, screen_size.y)
+		)
 
-func _input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			var card = raycast_for_card()
-			if card:
-				start_drag(card)
-		else:
-			if card_being_dragged:
-				finish_drag()
 
 func start_drag(card):
 	card.scale=Vector2(1, 1)
 	card_being_dragged = card
 
+
 func finish_drag():
+	print("finished drag")
 	card_being_dragged.scale=Vector2(1.05, 1.05)
 	var card_slot_found = raycast_for_card_slot()
+	print("card_slot_found", card_slot_found)
 	if card_slot_found and card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-		player_hand_reference.remove_card_from_hand(card_being_dragged)
+		player_hand_reference.remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
 		card_being_dragged.position = card_slot_found.position
 		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot_found.cards_in_slot.append(card_being_dragged)
 	else:
-		player_hand_reference.add_card_to_hand(card_being_dragged)
+		player_hand_reference.add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	card_being_dragged = null
-	
+
+
 func raycast_for_card_slot():
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
@@ -54,26 +55,30 @@ func raycast_for_card_slot():
 	if result.size()>0:
 		return result[0].collider.get_parent()
 	return null
-	
+
+
 func raycast_for_card():
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
 	parameters.position = get_global_mouse_position()
 	parameters.collide_with_areas = true
-	parameters.collision_mask = COLLISION_MASK_CARD
+	#parameters.collision_mask = COLLISION_MASK_CARD
 	var result = space_state.intersect_point(parameters)
 	if result.size()>0:
 		return get_card_with_highest_z(result)#result[0].collider.get_parent()
 	return null
 
+
 func connect_card_signals(card):
 	card.connect("hovered", _on_hovered_over_card)
 	card.connect("hovered_off", _on_hovered_off_card)
+	
 	
 func _on_hovered_over_card(card):
 	if not is_hovering_on_card:
 		is_hovering_on_card = true
 		highlight_card(card, true)
+
 
 func _on_hovered_off_card(card):
 	if not card_being_dragged:
@@ -83,7 +88,8 @@ func _on_hovered_off_card(card):
 			highlight_card(new_card_hovered, true)
 		else:
 			is_hovering_on_card = false
-	
+
+
 func highlight_card(card, hovered):
 	if hovered:
 		card.scale=Vector2(1.05,1.05)
@@ -91,6 +97,13 @@ func highlight_card(card, hovered):
 	else:
 		card.scale=Vector2(1, 1)
 		card.z_index = 1
+
+
+func on_left_click_release():
+	print("RRR")
+	if card_being_dragged:
+		finish_drag()
+
 
 func get_card_with_highest_z(cards):
 	var highest_z_card = cards[0].collider.get_parent()
