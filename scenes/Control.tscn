@@ -15,47 +15,50 @@ script = ExtResource("1_tgwut")
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 328.0
-offset_bottom = 183.0
+offset_right = 426.0
+offset_bottom = 260.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 18
 text = "Name"
 
 [node name="NameLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 placeholder_text = "Anonymous"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 18
 text = "Character"
 
 [node name="StatusLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 placeholder_text = "Unknown"
 
 [node name="UpdateButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 18
 text = "Update"
 
@@ -66,50 +69,55 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -172.0
-offset_top = -116.0
-offset_right = 172.0
-offset_bottom = 116.0
+offset_left = -191.0
+offset_top = -262.0
+offset_right = 196.0
+offset_bottom = 221.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
 [node name="PlaySoloButton" type="Button" parent="VBoxContainer2"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 34
 text = "Play Solo"
 
 [node name="GroupUpButoon" type="Button" parent="VBoxContainer2"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 34
 text = "Group up"
 
 [node name="Tutorial" type="Button" parent="VBoxContainer2"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 34
 text = "Tutorial
 "
 
 [node name="PlayIA" type="Button" parent="VBoxContainer2"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 34
 text = "Play vs IA"
 
 [node name="LogoutButton" type="Button" parent="."]
 layout_mode = 2
-offset_left = 770.0
-offset_top = 25.0
-offset_right = 1120.0
-offset_bottom = 80.0
+offset_left = 1458.0
+offset_top = 34.0
+offset_right = 1883.0
+offset_bottom = 119.0
 theme_override_font_sizes/font_size = 34
 text = "Logout"
 
 [node name="PlayerListLabel" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 20.0
-offset_top = 134.0
-offset_right = 353.0
-offset_bottom = 350.0
+offset_left = 22.0
+offset_top = 275.0
+offset_right = 355.0
+offset_bottom = 491.0
 text = "Players' status:
 "
 

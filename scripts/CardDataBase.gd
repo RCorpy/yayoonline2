@@ -1,0 +1,9 @@
+const CARDS = {
+	"ANGUSTIAS_PER": [],
+	"ENRIQUETA_PER":[],
+	"GERTRUDIS_PER":[],
+	"GREGORIO_PER":[],
+	"JEREMIAS_PER":[],
+	"LIBERTO_PER":[],
+	"URSULA_PER":[]
+}

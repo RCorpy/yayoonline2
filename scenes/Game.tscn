@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ebg38f5q7tdl" path="res://scenes/CardSlot.tscn" id="4_sb48q"]
 [ext_resource type="Script" uid="uid://dhq8jlyerlui6" path="res://scripts/Deck.gd" id="5_aug50"]
 [ext_resource type="Script" uid="uid://cmewxew0rcn8y" path="res://scripts/PlayerHand.gd" id="5_r0x5m"]
-[ext_resource type="Texture2D" uid="uid://4ivom48dqu4x" path="res://assets/Deck.png" id="5_s0nni"]
+[ext_resource type="Texture2D" uid="uid://c7tlofonvucwf" path="res://assets/REVERSO.png" id="6_kiw3p"]
 [ext_resource type="Script" uid="uid://b66gxunhiberm" path="res://scripts/InputManager.gd" id="7_kiw3p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkndl"]
@@ -15,7 +15,7 @@ bg_color = Color(0.202795, 0.719399, 0, 1)
 bg_color = Color(0.85006, 0.503213, 0.174839, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aug50"]
-size = Vector2(128, 166)
+size = Vector2(202, 245)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_wbfu4")
@@ -76,33 +76,85 @@ one_shot = true
 [node name="CardManager" type="Node2D" parent="GameContainer"]
 script = ExtResource("2_u44n3")
 
-[node name="CardSlot" parent="GameContainer" instance=ExtResource("4_sb48q")]
-position = Vector2(418, 401)
-
-[node name="CardSlot2" parent="GameContainer" instance=ExtResource("4_sb48q")]
-position = Vector2(610, 400)
-
 [node name="PlayerHand" type="Node2D" parent="GameContainer"]
 script = ExtResource("5_r0x5m")
 
 [node name="Deck" type="Node2D" parent="GameContainer"]
 z_index = -2
-position = Vector2(511, 226)
+position = Vector2(960, 500)
+scale = Vector2(0.8, 0.8)
 script = ExtResource("5_aug50")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameContainer/Deck"]
-scale = Vector2(0.716667, 0.624528)
-texture = ExtResource("5_s0nni")
+z_index = -2
+scale = Vector2(0.270618, 0.235825)
+texture = ExtResource("6_kiw3p")
 
 [node name="Area2D" type="Area2D" parent="GameContainer/Deck"]
 collision_layer = 4
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameContainer/Deck/Area2D"]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_aug50")
 
 [node name="InputManager" type="Node2D" parent="GameContainer"]
 script = ExtResource("7_kiw3p")
+
+[node name="EndTurnButton" type="Button" parent="GameContainer"]
+offset_left = 1090.0
+offset_top = 400.0
+offset_right = 1236.0
+offset_bottom = 603.0
+text = "PASAR TURNO"
+
+[node name="PlayerCardSlots" type="Node2D" parent="GameContainer"]
+
+[node name="CardSlot" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(760, 740)
+
+[node name="CardSlot2" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(960, 740)
+
+[node name="CardSlot3" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(1160, 740)
+
+[node name="Opponent1CardSlots" type="Node2D" parent="GameContainer"]
+position = Vector2(2202, -541)
+rotation = 1.5708
+
+[node name="Opponent1CardSlot" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(760, 740)
+
+[node name="Opponent1CardSlot2" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(960, 740)
+
+[node name="Opponent1CardSlot3" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(1160, 740)
+
+[node name="Opponent2CardSlots" type="Node2D" parent="GameContainer"]
+position = Vector2(-3, -572)
+
+[node name="CardSlot" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(760, 740)
+
+[node name="CardSlot2" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(960, 740)
+
+[node name="CardSlot3" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(1160, 740)
+
+[node name="Opponent3CardSlots" type="Node2D" parent="GameContainer"]
+position = Vector2(-527, -288)
+
+[node name="CardSlot" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(760, 740)
+
+[node name="CardSlot2" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(960, 740)
+
+[node name="CardSlot3" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+position = Vector2(1160, 740)
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]

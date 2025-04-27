@@ -4,6 +4,9 @@ const FINISH_DRAG_SPEED = 0.4
 const MAX_CARDS_IN_SLOT = 1
 const COLLISION_MASK_CARD_SLOT = 2
 
+const DEFAULT_CARD_SCALE = 0.8
+const DEFAULT_HIGHLIGHT_SCALE = 0.85
+
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
@@ -26,17 +29,19 @@ func _process(delta):
 
 
 func start_drag(card):
-	card.scale=Vector2(1, 1)
+	card.scale=Vector2(DEFAULT_CARD_SCALE,DEFAULT_CARD_SCALE)
 	card_being_dragged = card
 
 
 func finish_drag():
 	print("finished drag")
-	card_being_dragged.scale=Vector2(1.05, 1.05)
+	card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
 	var card_slot_found = raycast_for_card_slot()
 	print("card_slot_found", card_slot_found)
 	if card_slot_found and card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
 		player_hand_reference.remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+		#The position is always the same, need to rotate and fit in the right one
+		#probably card_slot_found.get_parent().rotation and card_slot_found.get_parent().position and add that to the current
 		card_being_dragged.position = card_slot_found.position
 		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot_found.cards_in_slot.append(card_being_dragged)
@@ -92,15 +97,14 @@ func _on_hovered_off_card(card):
 
 func highlight_card(card, hovered):
 	if hovered:
-		card.scale=Vector2(1.05,1.05)
+		card.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE,DEFAULT_HIGHLIGHT_SCALE)
 		card.z_index = 2
 	else:
-		card.scale=Vector2(1, 1)
+		card.scale=Vector2(DEFAULT_CARD_SCALE, DEFAULT_CARD_SCALE)
 		card.z_index = 1
 
 
 func on_left_click_release():
-	print("RRR")
 	if card_being_dragged:
 		finish_drag()
 

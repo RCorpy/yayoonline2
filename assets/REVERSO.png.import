@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7tlofonvucwf"
-path="res://.godot/imported/REVERSO_CARTAS_IAIO (1).png-c6dcf99c44f70cb362d14466176092fa.ctex"
+path="res://.godot/imported/REVERSO.png-a28a7c23b0edc4c0c9ea033c46a35433.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/REVERSO_CARTAS_IAIO (1).png"
-dest_files=["res://.godot/imported/REVERSO_CARTAS_IAIO (1).png-c6dcf99c44f70cb362d14466176092fa.ctex"]
+source_file="res://assets/REVERSO.png"
+dest_files=["res://.godot/imported/REVERSO.png-a28a7c23b0edc4c0c9ea033c46a35433.ctex"]
 
 [params]
 
