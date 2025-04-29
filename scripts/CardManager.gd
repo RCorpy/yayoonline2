@@ -2,7 +2,7 @@ extends Node2D
 
 const FINISH_DRAG_SPEED = 0.4
 const MAX_CARDS_IN_SLOT = 1
-const COLLISION_MASK_CARD_SLOT = 2
+const COLLISION_MASK_PLAYER_AREA = 8
 
 const DEFAULT_CARD_SCALE = 0.8
 const DEFAULT_HIGHLIGHT_SCALE = 0.85
@@ -15,6 +15,7 @@ var player_hand_reference
 
 
 func _ready():
+
 	screen_size = get_viewport_rect().size
 	player_hand_reference = $"../PlayerHand"
 	$"../InputManager".connect("left_mouse_button_released", on_left_click_release)
@@ -37,31 +38,40 @@ func start_drag(card):
 func finish_drag():
 	print("finished drag")
 	card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
-	var card_slot_found = raycast_for_card_slot()
-	print("card_slot_found", card_slot_found)
-	if card_slot_found and card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-		player_hand_reference.remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
-		#The position is always the same, need to rotate and fit in the right one
-		#probably card_slot_found.get_parent().rotation and card_slot_found.get_parent().position and add that to the current 
-		card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
-		card_being_dragged.global_position = card_slot_found.global_position
-		card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
-		card_being_dragged.card_slot_of_card = card_slot_found
-		print(card_slot_found.position)
-		 
-		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
-		card_slot_found.cards_in_slot.append(card_being_dragged)
+	var player_found = raycast_for_player_area()
+	print("player_found", player_found)
+	
+	if player_found:
+		var card_slot_found = get_player_card_slot(player_found)
+		print("card slot found", card_slot_found)
+		if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
+			player_hand_reference.remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
+			card_being_dragged.global_position = card_slot_found.global_position
+			card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
+			card_being_dragged.card_slot_of_card = card_slot_found
+			#print(card_slot_found.position)
+			#
+			card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+			card_slot_found.cards_in_slot.append(card_being_dragged)
+		else:
+			player_hand_reference.add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	else:
 		player_hand_reference.add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	card_being_dragged = null
 
+func get_player_card_slot(player):
+	for node in player.get_node(player.name + "CardSlots").get_children():
+		if node.card_slot_type == CardDataBase.CARDS[card_being_dragged.name_of_card][0]:
+			return node
+	
 
-func raycast_for_card_slot():
+func raycast_for_player_area():
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
 	parameters.position = get_global_mouse_position()
 	parameters.collide_with_areas = true
-	parameters.collision_mask = COLLISION_MASK_CARD_SLOT
+	parameters.collision_mask = COLLISION_MASK_PLAYER_AREA
 	var result = space_state.intersect_point(parameters)
 	if result.size()>0:
 		return result[0].collider.get_parent()

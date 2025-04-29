@@ -6,6 +6,7 @@ signal hovered_off
 var card_position
 var card_slot_of_card
 var card_type
+var name_of_card
 
 func _ready():
 	get_parent().connect_card_signals(self)

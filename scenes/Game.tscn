@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://wxqii62b2lng"]
+[gd_scene load_steps=15 format=3 uid="uid://wxqii62b2lng"]
 
 [ext_resource type="Script" uid="uid://d255l710kfrff" path="res://scripts/Game.gd" id="1_wbfu4"]
 [ext_resource type="Script" uid="uid://b1dglrptag18y" path="res://scripts/CardManager.gd" id="2_u44n3"]
@@ -16,6 +16,18 @@ bg_color = Color(0.85006, 0.503213, 0.174839, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aug50"]
 size = Vector2(202, 245)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kiw3p"]
+size = Vector2(171, 922)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_400sg"]
+size = Vector2(534, 508.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4kob"]
+size = Vector2(968, 187)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qy1jj"]
+size = Vector2(560.5, 506)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_wbfu4")
@@ -108,73 +120,122 @@ offset_right = 1236.0
 offset_bottom = 603.0
 text = "PASAR TURNO"
 
-[node name="PlayerCardSlots" type="Node2D" parent="GameContainer"]
+[node name="Player" type="Node2D" parent="GameContainer"]
+
+[node name="PlayerArea" type="Area2D" parent="GameContainer/Player"]
+rotation = -1.5708
+collision_layer = 8
+collision_mask = 8
+
+[node name="PlayerCollisionArea" type="CollisionShape2D" parent="GameContainer/Player/PlayerArea"]
+light_mask = 8
+visibility_layer = 8
+position = Vector2(-789.004, 982.997)
+shape = SubResource("RectangleShape2D_kiw3p")
+
+[node name="PlayerCardSlots" type="Node2D" parent="GameContainer/Player"]
 position = Vector2(960, 740)
 
-[node name="CardSlot" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="Opponent1CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(1464, 442)
+[node name="Opponent1" type="Node2D" parent="GameContainer"]
+
+[node name="Opponent1CardSlots" type="Node2D" parent="GameContainer/Opponent1"]
+position = Vector2(1656, 447)
 rotation = -1.5708
 
-[node name="Opponent1CardSlot" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="Opponent1CardSlot" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="Opponent1CardSlot2" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="Opponent1CardSlot2" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="Opponent1CardSlot3" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="Opponent1CardSlot3" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="Opponent2CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(964, 203)
+[node name="Opponent1Area" type="Area2D" parent="GameContainer/Opponent1"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="Opponent1CollisionArea" type="CollisionShape2D" parent="GameContainer/Opponent1/Opponent1Area"]
+light_mask = 8
+visibility_layer = 8
+position = Vector2(1658, 446.125)
+shape = SubResource("RectangleShape2D_400sg")
+
+[node name="Opponent2" type="Node2D" parent="GameContainer"]
+
+[node name="Opponent2Area" type="Area2D" parent="GameContainer/Opponent2"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="Opponent2CollisionArea" type="CollisionShape2D" parent="GameContainer/Opponent2/Opponent2Area"]
+light_mask = 8
+visibility_layer = 8
+position = Vector2(991, 91.5)
+shape = SubResource("RectangleShape2D_g4kob")
+
+[node name="Opponent2CardSlots" type="Node2D" parent="GameContainer/Opponent2"]
+position = Vector2(994, 176)
 rotation = 3.14159
 
-[node name="CardSlot" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="Opponent3CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(474, 474)
+[node name="Opponent3" type="Node2D" parent="GameContainer"]
+
+[node name="Opponent3Area" type="Area2D" parent="GameContainer/Opponent3"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="Opponent3CollisionArea" type="CollisionShape2D" parent="GameContainer/Opponent3/Opponent3Area"]
+light_mask = 8
+visibility_layer = 8
+position = Vector2(279.25, 448)
+shape = SubResource("RectangleShape2D_qy1jj")
+
+[node name="Opponent3CardSlots" type="Node2D" parent="GameContainer/Opponent3"]
+position = Vector2(290, 451)
 rotation = 1.5708
 
-[node name="CardSlot" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-200, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(200, -2)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
