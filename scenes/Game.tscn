@@ -109,52 +109,75 @@ offset_bottom = 603.0
 text = "PASAR TURNO"
 
 [node name="PlayerCardSlots" type="Node2D" parent="GameContainer"]
+position = Vector2(960, 740)
 
 [node name="CardSlot" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(760, 740)
+position = Vector2(-200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "nieto"
 
 [node name="CardSlot2" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(960, 740)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "planta"
 
 [node name="CardSlot3" parent="GameContainer/PlayerCardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(1160, 740)
+position = Vector2(200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "mascota"
 
 [node name="Opponent1CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(2202, -541)
-rotation = 1.5708
+position = Vector2(1464, 442)
+rotation = -1.5708
 
 [node name="Opponent1CardSlot" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(760, 740)
+position = Vector2(-200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "nieto"
 
 [node name="Opponent1CardSlot2" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(960, 740)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "planta"
 
 [node name="Opponent1CardSlot3" parent="GameContainer/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(1160, 740)
+position = Vector2(200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "mascota"
 
 [node name="Opponent2CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(-3, -572)
+position = Vector2(964, 203)
+rotation = 3.14159
 
 [node name="CardSlot" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(760, 740)
+position = Vector2(-200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "nieto"
 
 [node name="CardSlot2" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(960, 740)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "planta"
 
 [node name="CardSlot3" parent="GameContainer/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(1160, 740)
+position = Vector2(200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "mascota"
 
 [node name="Opponent3CardSlots" type="Node2D" parent="GameContainer"]
-position = Vector2(-527, -288)
+position = Vector2(474, 474)
+rotation = 1.5708
 
 [node name="CardSlot" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(760, 740)
+position = Vector2(-200, 0)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "nieto"
 
 [node name="CardSlot2" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(960, 740)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "planta"
 
 [node name="CardSlot3" parent="GameContainer/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
-position = Vector2(1160, 740)
+position = Vector2(200, -2)
+scale = Vector2(0.6, 0.6)
+card_slot_type = "mascota"
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]

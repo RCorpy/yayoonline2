@@ -9,7 +9,7 @@ var player_deck = [
 	"LIBERTO_PER",
 	"URSULA_PER"]
 	
-var databaseref
+var card_databaseref
 
 const CARD_SCENE_PATH = "res://scenes/Card.tscn"
 const CARD_DRAW_SPEED = 0.2
@@ -17,7 +17,7 @@ const CARD_DRAW_SPEED = 0.2
 
 
 func _ready():
-	databaseref = preload("res://scripts/CardDataBase.gd")
+	card_databaseref = preload("res://scripts/CardDataBase.gd")
 	player_deck.shuffle()
 
 func draw_card():
@@ -32,6 +32,7 @@ func draw_card():
 	var card_image_path = str("res://assets/"+ card_draw_name +".png") 
 	new_card.get_node("CardImage").texture = load(card_image_path)
 	new_card.position = position
+	new_card.card_type = card_databaseref[card_draw_name][0]
 	$"../CardManager".add_child(new_card)
 	new_card.name = "Card"
 	#new_card.position = Vector2(center_screen_x,50)
