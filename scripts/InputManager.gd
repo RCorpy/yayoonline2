@@ -35,3 +35,7 @@ func raycast_at_cursor():
 				card_manager_reference.start_drag(card_found)
 		elif result_collision_mask == COLLISION_MASK_DECK:
 			deck_reference.draw_card()
+
+func raycast_for_players():
+	if card_manager_reference.card_being_dragged:
+		print("yes")

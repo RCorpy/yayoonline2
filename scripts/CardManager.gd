@@ -3,6 +3,7 @@ extends Node2D
 const FINISH_DRAG_SPEED = 0.4
 const MAX_CARDS_IN_SLOT = 1
 const COLLISION_MASK_PLAYER_AREA = 8
+const COLLISION_MASK_CARD = 2
 
 const DEFAULT_CARD_SCALE = 0.8
 const DEFAULT_HIGHLIGHT_SCALE = 0.85
@@ -79,11 +80,12 @@ func raycast_for_player_area():
 
 
 func raycast_for_card():
+	
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
 	parameters.position = get_global_mouse_position()
 	parameters.collide_with_areas = true
-	#parameters.collision_mask = COLLISION_MASK_CARD
+	parameters.collision_mask = COLLISION_MASK_CARD
 	var result = space_state.intersect_point(parameters)
 	if result.size()>0:
 		return get_card_with_highest_z(result)#result[0].collider.get_parent()
@@ -112,12 +114,13 @@ func _on_hovered_off_card(card):
 
 
 func highlight_card(card, hovered):
-	if hovered:
-		card.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE,DEFAULT_HIGHLIGHT_SCALE)
-		card.z_index = 2
-	else:
-		card.scale=Vector2(DEFAULT_CARD_SCALE, DEFAULT_CARD_SCALE)
-		card.z_index = 1
+	if card.has_method("_on_area_2d_mouse_entered"):
+		if hovered:
+			card.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE,DEFAULT_HIGHLIGHT_SCALE)
+			card.z_index = 2
+		else:
+			card.scale=Vector2(DEFAULT_CARD_SCALE, DEFAULT_CARD_SCALE)
+			card.z_index = 1
 
 
 func on_left_click_release():
