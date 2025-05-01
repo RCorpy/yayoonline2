@@ -12,13 +12,12 @@ const CARD_ON_SLOT_SCALE = 0.6
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
-var player_hand_reference
+var player_highlighted
 
 
 func _ready():
 
 	screen_size = get_viewport_rect().size
-	player_hand_reference = $"../PlayerHand"
 	$"../InputManager".connect("left_mouse_button_released", on_left_click_release)
 
 
@@ -29,6 +28,16 @@ func _process(delta):
 			clamp(mouse_position.x, 0, screen_size.x), 
 			clamp(mouse_position.y, 0, screen_size.y)
 		)
+		var player_selected = raycast_for_player_area()
+		if player_selected == player_highlighted:
+			pass
+		elif player_selected and not player_highlighted:
+			player_highlighted = player_selected
+			highlight_player(player_highlighted, true)
+			print("on player ", player_selected, " area")
+		else:
+			highlight_player(player_highlighted, false)
+			player_highlighted = null
 
 
 func start_drag(card):
@@ -37,6 +46,10 @@ func start_drag(card):
 
 
 func finish_drag():
+	
+	if player_highlighted:
+		highlight_player(player_highlighted, false)
+		player_highlighted = null
 	print("finished drag")
 	card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
 	var player_found = raycast_for_player_area()
@@ -46,7 +59,9 @@ func finish_drag():
 		var card_slot_found = get_player_card_slot(player_found)
 		print("card slot found", card_slot_found)
 		if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-			player_hand_reference.remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			#print("player found ", player_found)
+			player_found.get_node("Hand").remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			card_being_dragged.flip_card(true)
 			card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
 			card_being_dragged.global_position = card_slot_found.global_position
 			card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
@@ -56,9 +71,9 @@ func finish_drag():
 			card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 			card_slot_found.cards_in_slot.append(card_being_dragged)
 		else:
-			player_hand_reference.add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	else:
-		player_hand_reference.add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
+		card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	card_being_dragged = null
 
 func get_player_card_slot(player):
@@ -122,7 +137,10 @@ func highlight_card(card, hovered):
 			card.scale=Vector2(DEFAULT_CARD_SCALE, DEFAULT_CARD_SCALE)
 			card.z_index = 1
 
-
+func highlight_player(player_highlighted, highlighted):
+	if player_highlighted:
+		player_highlighted.get_node("HighlightRect").visible = highlighted
+	
 func on_left_click_release():
 	if card_being_dragged:
 		finish_drag()

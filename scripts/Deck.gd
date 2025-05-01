@@ -6,6 +6,16 @@ var player_deck = [
 	"ANGUSTIAS_PER",
 	"ANGUSTIAS_PER",
 	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
+	"ANGUSTIAS_PER",
 	"ENRIQUETA_PER",
 	"GERTRUDIS_PER",
 	"GREGORIO_PER",
@@ -24,7 +34,7 @@ func _ready():
 	card_databaseref = preload("res://scripts/CardDataBase.gd")
 	player_deck.shuffle()
 
-func draw_card():
+func draw_card(player_parent_node):
 	var card_draw_name = player_deck[0]
 	player_deck.erase(card_draw_name)
 	
@@ -37,9 +47,12 @@ func draw_card():
 	new_card.get_node("CardImage").texture = load(card_image_path)
 	new_card.position = position
 	new_card.card_type = card_databaseref.CARDS[card_draw_name][0]
-	$"../CardManager".add_child(new_card)
+	player_parent_node.get_node("Hand").add_child(new_card)
+	new_card.scale = Vector2($"../CardManager".DEFAULT_CARD_SCALE,$"../CardManager".DEFAULT_CARD_SCALE) 
 	new_card.name = "Card"
 	new_card.name_of_card = card_draw_name
 	#new_card.position = Vector2(center_screen_x,50)
-	$"../PlayerHand".add_card_to_hand(new_card, CARD_DRAW_SPEED)
-	new_card.get_node("AnimationPlayer").play("card_flip")
+	player_parent_node.get_node("Hand").add_card_to_hand(new_card, CARD_DRAW_SPEED)
+	
+	if player_parent_node.name == "Player":#only flip if its the player
+		new_card.flip_card(true)

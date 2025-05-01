@@ -2,14 +2,18 @@ extends Node2D
 
 const HAND_COUNT = 5
 const CARD_WIDTH = 160
-const HAND_Y_POSITION = 970
 const X_HAND_OFFSET_VAR = 0.01
 
 var player_hand = []
 var center_screen_x
+var center_screen_y
+@export var center_of_hand:Vector2 = Vector2(0,0)
+@export var rotate:float = 0
+
 
 func _ready():
-	center_screen_x = get_viewport().size.x /2 
+	center_screen_x = get_viewport().size.x /2
+	center_screen_y = get_viewport().size.y /2
 	
 	for i in range(HAND_COUNT):
 		$"../../Deck".draw_card(get_parent())
@@ -29,7 +33,7 @@ func add_card_to_hand(card, speed):
 	
 func update_hand_positions(speed):
 	for i in range(player_hand.size()):
-		var new_position = Vector2(calculate_card_position(i), HAND_Y_POSITION)
+		var new_position = Vector2(calculate_card_position(i), center_of_hand.y)
 		var card = player_hand[i]
 		card.card_position = new_position
 		animate_card_to_position(card, new_position, speed)
@@ -37,8 +41,8 @@ func update_hand_positions(speed):
 		
 func calculate_card_position(index):
 	var total_width = (player_hand.size() -1) * CARD_WIDTH
-	var x_offset = center_screen_x + (index + X_HAND_OFFSET_VAR) * CARD_WIDTH - total_width/2
-	#print("center_screen_x ", center_screen_x, "index ", index, "CARD_WIDTH ", CARD_WIDTH, "total_width ", total_width)
+	var x_offset = center_of_hand.x + (index + X_HAND_OFFSET_VAR) * CARD_WIDTH - total_width/2
+	#print("center_of_hand.x ", center_of_hand.x, "index ", index, "CARD_WIDTH ", CARD_WIDTH, "total_width ", total_width)
 	return x_offset
 	
 func animate_card_to_position(card, position, speed):
