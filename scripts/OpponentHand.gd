@@ -1,19 +1,15 @@
 extends Node2D
 
 const HAND_COUNT = 5
-const CARD_WIDTH = 160
+const CARD_WIDTH = 80
 const X_HAND_OFFSET_VAR = 0.01
 
 var player_hand = []
-var center_screen_x
-var center_screen_y
-@export var center_of_hand:Vector2 = Vector2(0,0)
+
 @export var rotate:float = 0
 
 
 func _ready():
-	center_screen_x = get_viewport().size.x /2
-	center_screen_y = get_viewport().size.y /2
 	
 	for i in range(HAND_COUNT):
 		$"../../Deck".draw_card(get_parent())
@@ -27,23 +23,26 @@ func _ready():
 func add_card_to_hand(card, speed):
 	if card not in player_hand:
 		player_hand.insert(0, card)
+		card.rotate(deg_to_rad(rotate))
+		card.disable_card(true)
 		update_hand_positions(speed)
 	else:
 		animate_card_to_position(card, card.card_position, speed)
 	
 func update_hand_positions(speed):
 	for i in range(player_hand.size()):
-		var new_position = Vector2(calculate_card_position(i), center_of_hand.y)
+		var new_position = calculate_card_position(i)
 		var card = player_hand[i]
 		card.card_position = new_position
+		card.scale = Vector2(0.5, 0.5)
 		animate_card_to_position(card, new_position, speed)
 		
 		
 func calculate_card_position(index):
 	var total_width = (player_hand.size() -1) * CARD_WIDTH
-	var x_offset = center_of_hand.x + (index + X_HAND_OFFSET_VAR) * CARD_WIDTH - total_width/2
-	#print("center_of_hand.x ", center_of_hand.x, "index ", index, "CARD_WIDTH ", CARD_WIDTH, "total_width ", total_width)
-	return x_offset
+	var offset = Vector2((index + X_HAND_OFFSET_VAR) * CARD_WIDTH - total_width/2, 0)
+
+	return offset.rotated(deg_to_rad(rotate))
 	
 func animate_card_to_position(card, position, speed):
 	var tween = get_tree().create_tween()

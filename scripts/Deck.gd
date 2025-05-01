@@ -1,28 +1,6 @@
 extends Node2D
 
-var player_deck = [
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ANGUSTIAS_PER",
-	"ENRIQUETA_PER",
-	"GERTRUDIS_PER",
-	"GREGORIO_PER",
-	"JEREMIAS_PER",
-	"LIBERTO_PER",
-	"URSULA_PER"]
-	
+var player_deck
 var card_databaseref
 
 const CARD_SCENE_PATH = "res://scenes/Card.tscn"
@@ -32,6 +10,8 @@ const CARD_DRAW_SPEED = 0.2
 
 func _ready():
 	card_databaseref = preload("res://scripts/CardDataBase.gd")
+
+	player_deck = card_databaseref.FULL_DECK
 	player_deck.shuffle()
 
 func draw_card(player_parent_node):
@@ -39,7 +19,7 @@ func draw_card(player_parent_node):
 	player_deck.erase(card_draw_name)
 	
 	if player_deck.size() == 0:
-		print("DECK FINISHED")
+		player_deck = card_databaseref.FULL_DECK
 		
 	var card_scene = preload(CARD_SCENE_PATH)
 	var new_card = card_scene.instantiate()
@@ -56,3 +36,6 @@ func draw_card(player_parent_node):
 	
 	if player_parent_node.name == "Player":#only flip if its the player
 		new_card.flip_card(true)
+
+func get_card_info(card):
+	return card_databaseref.CARDS[card]

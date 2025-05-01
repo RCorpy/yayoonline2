@@ -50,26 +50,40 @@ func finish_drag():
 	if player_highlighted:
 		highlight_player(player_highlighted, false)
 		player_highlighted = null
-	print("finished drag")
 	card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
 	var player_found = raycast_for_player_area()
-	print("player_found", player_found)
 	
-	if player_found:
+	if not card_is_affordable():
+		card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
+		print("CANT AFFORD")
+
+	elif player_found:
 		var card_slot_found = get_player_card_slot(player_found)
-		print("card slot found", card_slot_found)
 		if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-			#print("player found ", player_found)
-			player_found.get_node("Hand").remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
-			card_being_dragged.flip_card(true)
+			var card_info = $"../Deck".get_card_info(card_being_dragged.name_of_card)
+			#Substract the gold needed
+			$"../PlayerManager".set_stats(
+				card_being_dragged.get_parent().get_parent(),
+				-card_info[1],
+				0) 
+			 #Apply card effects
+			$"../PlayerManager".set_stats(
+				player_found,
+				card_info[2],
+				card_info[3]) 
+				
+			card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			
 			card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
 			card_being_dragged.global_position = card_slot_found.global_position
-			card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
 			card_being_dragged.card_slot_of_card = card_slot_found
-			#print(card_slot_found.position)
-			#
-			card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 			card_slot_found.cards_in_slot.append(card_being_dragged)
+			
+			card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
+			card_being_dragged.z_index = 0
+			card_being_dragged.flip_card(true)
+
+			card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		else:
 			card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	else:
@@ -81,6 +95,12 @@ func get_player_card_slot(player):
 		if node.card_slot_type == CardDataBase.CARDS[card_being_dragged.name_of_card][0]:
 			return node
 	
+func card_is_affordable():
+	if $"../PlayerManager".get_stats(card_being_dragged.get_parent().get_parent())[0] >= $"../Deck".get_card_info(card_being_dragged.name_of_card)[1]:
+		return true
+	else:
+		return false
+
 
 func raycast_for_player_area():
 	var space_state = get_world_2d().direct_space_state

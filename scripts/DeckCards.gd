@@ -1,12 +1,4 @@
-const CARDS = {			 #type,	price,+money, +health,
-	"ANGUSTIAS_PER": 	["nieto",	1,	1,	-1],
-	"ENRIQUETA_PER":	["nieto",	0,	1,	-1],
-	"GERTRUDIS_PER":	["planta",	0,	1,	1],
-	"GREGORIO_PER":		["planta",	0,	1,	1],
-	"JEREMIAS_PER":		["planta",	0,	1,	1],
-	"LIBERTO_PER":		["mascota",	0,	1,	0],
-	"URSULA_PER":		["mascota",	0,	1,	0]
-}
+extends Node
 
 const FULL_DECK = [
 	"ANGUSTIAS_PER",

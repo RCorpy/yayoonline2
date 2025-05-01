@@ -23,3 +23,6 @@ func flip_card(flip):
 	if flip:
 		flipped = flip
 		$AnimationPlayer.play("card_flip")
+
+func disable_card(disable):
+	$Area2D/CollisionShape2D.disabled = disable

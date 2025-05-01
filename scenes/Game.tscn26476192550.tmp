@@ -467,4 +467,3 @@ card_slot_type = "propiedad"
 [connection signal="pressed" from="Container/ReadyButton" to="." method="_on_ready_button_pressed"]
 [connection signal="pressed" from="Container/KickNotReady" to="." method="_on_kick_not_ready_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="pressed" from="GameContainer/EndTurnButton" to="GameContainer/PlayerManager" method="_on_end_turn_button_pressed"]
