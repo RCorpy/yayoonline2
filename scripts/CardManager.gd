@@ -38,7 +38,9 @@ func _process(delta):
 		else:
 			highlight_player(player_highlighted, false)
 			player_highlighted = null
-
+	else:
+		highlight_player(player_highlighted, false)
+		player_highlighted = null
 
 func start_drag(card):
 	card.scale=Vector2(DEFAULT_CARD_SCALE,DEFAULT_CARD_SCALE)
@@ -46,44 +48,46 @@ func start_drag(card):
 
 
 func finish_drag():
-	
-	if player_highlighted:
-		highlight_player(player_highlighted, false)
-		player_highlighted = null
-	card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
-	var player_found = raycast_for_player_area()
-	
-	if not card_is_affordable():
-		card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
-		print("CANT AFFORD")
+	if $"../PlayerManager".is_local_player_turn():
+		if player_highlighted:
+			highlight_player(player_highlighted, false)
+			player_highlighted = null
+		card_being_dragged.scale=Vector2(DEFAULT_HIGHLIGHT_SCALE, DEFAULT_HIGHLIGHT_SCALE)
+		var player_found = raycast_for_player_area()
+		
+		if not card_is_affordable():
+			card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			print("CANT AFFORD")
 
-	elif player_found:
-		var card_slot_found = get_player_card_slot(player_found)
-		if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-			var card_info = $"../Deck".get_card_info(card_being_dragged.name_of_card)
-			#Substract the gold needed
-			$"../PlayerManager".set_stats(
-				card_being_dragged.get_parent().get_parent(),
-				-card_info[1],
-				0) 
-			 #Apply card effects
-			$"../PlayerManager".set_stats(
-				player_found,
-				card_info[2],
-				card_info[3]) 
+		elif player_found:
+			var card_slot_found = get_player_card_slot(player_found)
+			if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
+				var card_info = $"../Deck".get_card_info(card_being_dragged.name_of_card)
+				#Substract the gold needed
+				$"../PlayerManager".set_stats(
+					card_being_dragged.get_parent().get_parent(),
+					-card_info[1],
+					0) 
+				 #Apply card effects
+				$"../PlayerManager".set_stats(
+					player_found,
+					card_info[2],
+					card_info[3]) 
+					
+				card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
 				
-			card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
-			
-			card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
-			card_being_dragged.global_position = card_slot_found.global_position
-			card_being_dragged.card_slot_of_card = card_slot_found
-			card_slot_found.cards_in_slot.append(card_being_dragged)
-			
-			card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
-			card_being_dragged.z_index = 0
-			card_being_dragged.flip_card(true)
+				card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
+				card_being_dragged.global_position = card_slot_found.global_position
+				card_being_dragged.card_slot_of_card = card_slot_found
+				card_slot_found.cards_in_slot.append(card_being_dragged)
+				
+				card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
+				card_being_dragged.z_index = 0
+				card_being_dragged.flip_card(true)
 
-			card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+				card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+			else:
+				card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 		else:
 			card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	else:
