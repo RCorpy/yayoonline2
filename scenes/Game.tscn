@@ -93,7 +93,7 @@ one_shot = true
 script = ExtResource("2_g4kob")
 
 [node name="TurnTimer" type="Timer" parent="GameContainer/PlayerManager"]
-wait_time = 5.0
+wait_time = 15.0
 one_shot = true
 
 [node name="CardManager" type="Node2D" parent="GameContainer"]
@@ -211,6 +211,7 @@ card_slot_type = "mascota"
 [node name="CardSlot4" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 0)
 scale = Vector2(0.6, 0.6)
+card_slot_type = "propiedad"
 
 [node name="Opponent1" type="Node2D" parent="GameContainer"]
 
@@ -287,6 +288,7 @@ card_slot_type = "mascota"
 [node name="Opponent1CardSlot4" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 0)
 scale = Vector2(0.6, 0.6)
+card_slot_type = "propiedad"
 
 [node name="Opponent1Area" type="Area2D" parent="GameContainer/Opponent1"]
 collision_layer = 8

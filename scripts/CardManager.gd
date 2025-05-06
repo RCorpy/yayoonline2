@@ -1,13 +1,14 @@
 extends Node2D
 
 const FINISH_DRAG_SPEED = 0.4
-const MAX_CARDS_IN_SLOT = 1
+const MAX_CARDS_IN_SLOT = 3
 const COLLISION_MASK_PLAYER_AREA = 8
 const COLLISION_MASK_CARD = 2
 
 const DEFAULT_CARD_SCALE = 0.8
 const DEFAULT_HIGHLIGHT_SCALE = 0.85
 const CARD_ON_SLOT_SCALE = 0.6
+const SUBSEQUENT_CARD_DISPLACEMENT = Vector2(25,25)
 
 var card_being_dragged
 var screen_size
@@ -61,23 +62,17 @@ func finish_drag():
 
 		elif player_found:
 			var card_slot_found = get_player_card_slot(player_found)
-			if card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
-				var card_info = $"../Deck".get_card_info(card_being_dragged.name_of_card)
-				#Substract the gold needed
-				$"../PlayerManager".set_stats(
-					card_being_dragged.get_parent().get_parent(),
-					-card_info[1],
-					0) 
-				 #Apply card effects
-				$"../PlayerManager".set_stats(
-					player_found,
-					card_info[2],
-					card_info[3]) 
-					
-				card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
+			if not card_slot_found:
+				#HANDLE SPELLS AND SPECIALS
+				resolve_card_cost_health_money(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card))
+				card_being_dragged.queue_free()
+				
+			elif card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
+				resolve_card_cost_health_money(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card))
 				
 				card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
-				card_being_dragged.global_position = card_slot_found.global_position
+				var displacement = card_slot_found.cards_in_slot.size() * SUBSEQUENT_CARD_DISPLACEMENT.rotated(card_being_dragged.rotation)
+				card_being_dragged.global_position = card_slot_found.global_position + displacement
 				card_being_dragged.card_slot_of_card = card_slot_found
 				card_slot_found.cards_in_slot.append(card_being_dragged)
 				
@@ -98,6 +93,7 @@ func get_player_card_slot(player):
 	for node in player.get_node(player.name + "CardSlots").get_children():
 		if node.card_slot_type == CardDataBase.CARDS[card_being_dragged.name_of_card][0]:
 			return node
+	return null
 	
 func card_is_affordable():
 	if $"../PlayerManager".get_stats(card_being_dragged.get_parent().get_parent())[0] >= $"../Deck".get_card_info(card_being_dragged.name_of_card)[1]:
@@ -105,6 +101,17 @@ func card_is_affordable():
 	else:
 		return false
 
+func resolve_card_cost_health_money(target_player, casting_player, card_info):
+	$"../PlayerManager".set_stats(
+	casting_player,
+	-card_info[1],
+	0) 
+ #Apply card effects
+	$"../PlayerManager".set_stats(
+		target_player,
+		card_info[2],
+		card_info[3])
+	card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
 
 func raycast_for_player_area():
 	var space_state = get_world_2d().direct_space_state

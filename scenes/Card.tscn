@@ -57,6 +57,42 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(0.244233, 0.239654)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Cost:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("HealthGain:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MoneyGain:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_4dx8l"]
 resource_name = "card_flip"
@@ -108,6 +144,42 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(0.244233, 0.239654), Vector2(0.02, 0.24), Vector2(0.24, 0.24)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Cost:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.199529),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("HealthGain:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.199529),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MoneyGain:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.199529),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_40ytf"]
 _data = {
@@ -141,25 +213,42 @@ libraries = {
 autoplay = "RESET"
 
 [node name="Cost" type="RichTextLabel" parent="."]
-offset_left = 51.0
-offset_top = -123.0
-offset_right = 91.0
-offset_bottom = -83.0
+visible = false
+offset_left = 56.0
+offset_top = -150.0
+offset_right = 103.0
+offset_bottom = -104.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
 text = "5"
 
 [node name="HealthGain" type="RichTextLabel" parent="."]
-offset_left = -65.0
-offset_top = 84.0
-offset_right = -25.0
-offset_bottom = 124.0
-text = "6"
+visible = false
+offset_left = -72.0
+offset_top = 73.0
+offset_right = -32.0
+offset_bottom = 113.0
+theme_override_colors/default_color = Color(0.988235, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+text = "5"
 
 [node name="MoneyGain" type="RichTextLabel" parent="."]
-offset_left = 48.0
-offset_top = 84.0
-offset_right = 88.0
-offset_bottom = 124.0
+visible = false
+offset_left = 49.0
+offset_top = 72.0
+offset_right = 89.0
+offset_bottom = 112.0
+theme_override_colors/default_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
 text = "5"
+
+[node name="CardName" type="RichTextLabel" parent="."]
+offset_left = -156.0
+offset_top = -114.0
+offset_right = 156.0
+offset_bottom = -76.0
+text = "LONG ASS NAME FOR CARD"
+horizontal_alignment = 1
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
