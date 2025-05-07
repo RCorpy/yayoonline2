@@ -49,7 +49,8 @@ func next_turn(turn):
 		#draw a card
 		$"../Deck".draw_card(turn_player_node)
 		#remove 1 health, player got older, recieve pension $
-		set_stats(turn_player_node,1,-1)
+		var total_pension = turn_player_node.get_node("CardSlots").get_node("CardSlot4").cards_in_slot.size() + 1
+		set_stats(turn_player_node,total_pension,-1)
 	
 	if FirebaseData.player_id == current_player:
 		$"../EndTurnButton".disabled = false

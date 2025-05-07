@@ -84,7 +84,7 @@ offset_bottom = 479.0
 text = "Kick AFKs"
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 20.0
+wait_time = 8.0
 one_shot = true
 
 [node name="GameContainer" type="Node2D" parent="."]
@@ -190,25 +190,25 @@ visibility_layer = 8
 position = Vector2(-789.004, 982.997)
 shape = SubResource("RectangleShape2D_kiw3p")
 
-[node name="PlayerCardSlots" type="Node2D" parent="GameContainer/Player"]
+[node name="CardSlots" type="Node2D" parent="GameContainer/Player"]
 position = Vector2(960, 740)
 
-[node name="CardSlot" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Player/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Player/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(100, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Player/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-50, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="CardSlot4" parent="GameContainer/Player/PlayerCardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot4" parent="GameContainer/Player/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "propiedad"
@@ -266,26 +266,26 @@ offset_right = 1925.0
 offset_bottom = 699.0
 color = Color(1, 1, 0, 0.3)
 
-[node name="Opponent1CardSlots" type="Node2D" parent="GameContainer/Opponent1"]
+[node name="CardSlots" type="Node2D" parent="GameContainer/Opponent1"]
 position = Vector2(1656, 447)
 rotation = -1.5708
 
-[node name="Opponent1CardSlot" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Opponent1/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="Opponent1CardSlot2" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Opponent1/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(100, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="Opponent1CardSlot3" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Opponent1/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-50, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="Opponent1CardSlot4" parent="GameContainer/Opponent1/Opponent1CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot4" parent="GameContainer/Opponent1/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "propiedad"
@@ -360,26 +360,26 @@ visibility_layer = 8
 position = Vector2(991, 91.5)
 shape = SubResource("RectangleShape2D_g4kob")
 
-[node name="Opponent2CardSlots" type="Node2D" parent="GameContainer/Opponent2"]
+[node name="CardSlots" type="Node2D" parent="GameContainer/Opponent2"]
 position = Vector2(994, 176)
 rotation = 3.14159
 
-[node name="CardSlot" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Opponent2/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(250, 20)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Opponent2/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(100, 20)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Opponent2/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-50, 20)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="CardSlot4" parent="GameContainer/Opponent2/Opponent2CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot4" parent="GameContainer/Opponent2/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 20)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "propiedad"
@@ -444,26 +444,26 @@ visibility_layer = 8
 position = Vector2(279.25, 448)
 shape = SubResource("RectangleShape2D_qy1jj")
 
-[node name="Opponent3CardSlots" type="Node2D" parent="GameContainer/Opponent3"]
+[node name="CardSlots" type="Node2D" parent="GameContainer/Opponent3"]
 position = Vector2(290, 451)
 rotation = 1.5708
 
-[node name="CardSlot" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot" parent="GameContainer/Opponent3/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "nieto"
 
-[node name="CardSlot2" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot2" parent="GameContainer/Opponent3/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(100, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "planta"
 
-[node name="CardSlot3" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot3" parent="GameContainer/Opponent3/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-50, -2)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "mascota"
 
-[node name="CardSlot4" parent="GameContainer/Opponent3/Opponent3CardSlots" instance=ExtResource("4_sb48q")]
+[node name="CardSlot4" parent="GameContainer/Opponent3/CardSlots" instance=ExtResource("4_sb48q")]
 position = Vector2(-250, 0)
 scale = Vector2(0.6, 0.6)
 card_slot_type = "propiedad"

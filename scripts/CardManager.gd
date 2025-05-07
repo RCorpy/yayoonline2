@@ -90,7 +90,7 @@ func finish_drag():
 	card_being_dragged = null
 
 func get_player_card_slot(player):
-	for node in player.get_node(player.name + "CardSlots").get_children():
+	for node in player.get_node("CardSlots").get_children():
 		if node.card_slot_type == CardDataBase.CARDS[card_being_dragged.name_of_card][0]:
 			return node
 	return null
