@@ -61,44 +61,44 @@ const CARDS = {			 #type,	price,+money, +health,
 	
 	"BABY_SITTER":	["special", 2, 0, 0], #transfiere nietos a otro jugador
 	
-	"NIETO_FAMOSO":	["nieto", 0, 1, 3],
-	"NIETO_YOUTUBER":	["nieto", 0, 1, 3],
-	"NIETO_NORMAL":	["nieto", 0, 1, -1],
-	"NIETO_MEH":	["nieto", 0, 1, -1],
-	"NIETO_COMUN":	["nieto", 0, 1, -1],
-	"NIETO_AVIPAO":	["nieto", 0, 1, 0],
-	"NIETO_AUSTERO":	["nieto", 0, 1, 0],
-	"NIETO_VEGETARIANO":	["nieto", 0, 1, 0], #proteccion contra plantas
-	"NIETO_DERROCHADOR":	["nieto", 0, 1, -2],
-	"NIETO_PIJO":	["nieto", 0, 1, -2],
+	"NIETO_FAMOSO":	["nieto", 0, 3, 1],
+	"NIETO_YOUTUBER":	["nieto", 0, 3, 1],
+	"NIETO_NORMAL":	["nieto", 0, -1, 1],
+	"NIETO_MEH":	["nieto", 0, -1, 1],
+	"NIETO_COMUN":	["nieto", 0, -1, 1],
+	"NIETO_AVIPAO":	["nieto", 0, -1, 0],
+	"NIETO_AUSTERO":	["nieto", 0, 0, 1],
+	"NIETO_VEGETARIANO":	["nieto", 0, 0, 1], #proteccion contra plantas
+	"NIETO_DERROCHADOR":	["nieto", 0, -2, 1],
+	"NIETO_PIJO":	["nieto", 0, -2, 1],
 	
 	"MUERTE_AL_GATO":	["special", 0, 0, 0],
 	"MUERTE_AL_PERRO":	["special", 0, 0, 0],
 	
 	"PASEADOR_DE_PERROS": ["special", 0 ,0 ,0], #transfiere mascotas a otro jugador
 	
-	"MASCOTA_COCODRILO":	["mascota", 0, -1, -2], #protección contra nietos
-	"MASCOTA_BOA_CONSTRICTOR":	["mascota", 0, -1, -2], #protección contra nietos
-	"MASCOTA_OCA":	["mascota", 0, 1, -2],
-	"ACUARIO":	["mascota", 0, 1, -1],
-	"NIETO_FURRY":	["mascota", 0, 1, -1],
-	"MASCOTA_PERRO":	["mascota", 0, 1, 0],
-	"MASCOTA_GATO":	["mascota", 0, 1, 0],
-	"MASCOTA_HAMSTER":	["mascota", 0, 1, 0],
-	"MASCOTA_BUHO":	["mascota", 0, 1, 0],
-	"MASCOTA_TORTUGA":	["mascota", 0, 1, 0],
+	"MASCOTA_COCODRILO":	["mascota", 0, -2, -1], #protección contra nietos
+	"MASCOTA_BOA_CONSTRICTOR":	["mascota", 0, -2, -1], #protección contra nietos
+	"MASCOTA_OCA":	["mascota", 0, -2, 1],
+	"ACUARIO":	["mascota", 0, -1, 1],
+	"NIETO_FURRY":	["mascota", 0, -1, 1],
+	"MASCOTA_PERRO":	["mascota", 0, 0, 1],
+	"MASCOTA_GATO":	["mascota", 0, 0, 1],
+	"MASCOTA_HAMSTER":	["mascota", 0, 0, 1],
+	"MASCOTA_BUHO":	["mascota", 0, 0, 1],
+	"MASCOTA_TORTUGA":	["mascota", 0, 0, 1],
 	
 	"MUERTE_A_LA_HIERBA":	["special", 0, 0, 0],
 	"MUERTE_A_LA_HUERTA":	["special", 0, 0, 0],
 	
 	"ABUELO_EN_LA_JUNGLA":	["special", 0, 0, 0], #transfiere plantas a otro jugador
 	
-	"PLANTA_PINO":	["planta", 0, 1, 0],
-	"PLANTA_TULIPAN":	["planta", 0, 1, 0],
-	"PLANTA_SAUCE_LLORON":	["planta", 0, 1, 0],
-	"PLANTA_MARGARITA":	["planta", 0, 1, 0],
-	"PLANTA_FLOR_DE_PLASTICO":	["planta", 0, 1, 0],
-	"PLANTA_CARNIVORA":	["planta", 0, 1, 0], #proteccion contra mascotas
+	"PLANTA_PINO":	["planta", 0, 0, 1],
+	"PLANTA_TULIPAN":	["planta", 0, 0, 1],
+	"PLANTA_SAUCE_LLORON":	["planta", 0, 0, 1],
+	"PLANTA_MARGARITA":	["planta", 0, 0, 1],
+	"PLANTA_FLOR_DE_PLASTICO":	["planta", 0, 0, 1],
+	"PLANTA_CARNIVORA":	["planta", 0, 0, 1], #proteccion contra mascotas
 }
 
 const FULL_DECK = [
