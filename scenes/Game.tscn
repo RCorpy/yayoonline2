@@ -84,7 +84,7 @@ offset_bottom = 479.0
 text = "Kick AFKs"
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 8.0
+wait_time = 10.0
 one_shot = true
 
 [node name="GameContainer" type="Node2D" parent="."]
@@ -470,6 +470,12 @@ card_slot_type = "propiedad"
 
 [node name="WinScreen" type="Node2D" parent="GameContainer"]
 visible = false
+
+[node name="CardPos" type="TextEdit" parent="GameContainer"]
+offset_left = 677.0
+offset_top = 274.0
+offset_right = 862.0
+offset_bottom = 374.0
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]

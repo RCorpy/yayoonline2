@@ -1,9 +1,9 @@
 extends Node2D
 
-var PlayerHealth = 10
-var Opponent1Health = 10
-var Opponent2Health = 10
-var Opponent3Health = 10
+var PlayerHealth = 5
+var Opponent1Health = 5
+var Opponent2Health = 5
+var Opponent3Health = 5
 
 var PlayerCoins = 2
 var Opponent1Coins = 2
@@ -30,6 +30,7 @@ func _ready():
 	local_player_index = players.find(FirebaseData.player_id)
 	next_turn(0)
 	update_values()
+
 
 func works():
 	print("it does work")
@@ -59,6 +60,7 @@ func next_turn(turn):
 	else:
 		$"../EndTurnButton".disabled = true
 		if current_player.left(2)=="IA":
+			await get_tree().create_timer(1).timeout
 			IA_decision()
 			
 
@@ -160,6 +162,7 @@ func player_win_screen(player):
 
 
 func IA_decision():
+	
 	var my_coins = get_stats(get_player_node(current_player_index))[0]
 	var my_health = get_stats(get_player_node(current_player_index))[1]
 
@@ -169,9 +172,9 @@ func IA_decision():
 		var next_player_in_order = (current_player_index+enemy_index)%players.size()
 		if not next_player_in_order == current_player_index:
 			opponent_healths+= [[players[next_player_in_order], get_stats(get_player_node(next_player_in_order))[1]]]
-	var cards = get_player_node(current_player_index).get_node("Hand").get_children()
+	var cards = get_player_node(current_player_index).get_node("Hand").player_hand
 	print(opponent_healths)
-	var card_to_use = null
+	var card_to_use
 	var card_to_use_score = 0
 	var card_to_use_cost
 	var card_to_use_type 
@@ -197,51 +200,64 @@ func IA_decision():
 	print("secondary prio: ", secondary_target)
 	
 	for card in cards:
-
 		var card_info = $"../Deck".get_card_info(card.name_of_card)
-		if card_info[1] <= my_coins:
+		
+		if card_info[1] <= my_coins:  # Check if the AI can afford the card
 			var card_type = card_info[0]
 			var card_cost = card_info[1]
 			var card_money_gain = card_info[2]
 			var card_health_gain = card_info[3]
 			var card_score = 1
 			var use_on_self = card_health_gain < 0
+			
+			# If the card is a "propiedad", prioritize it (it seems like a special case)
 			if card_type == "propiedad":
 				card_score += 15
-				use_on_self = true
+				use_on_self = true  # Since propiedades seem to be prioritized for the AI
+			
+			# If the card has no health gain but provides money, AI might use it on itself
 			if card_health_gain == 0 and card_money_gain > 0:
 				use_on_self = true
+
+			# Prioritize using on the AI if the card heals or benefits it and priority_target is the AI
 			if use_on_self and priority_target == current_player:
 				card_score += 5
+			
+			# If the card doesn't benefit the AI but helps the opponent, prioritize if the target is not the AI
 			if not use_on_self and priority_target != current_player:
 				card_score += 5
+			
+			# Add the card's health and money gain values to the score
 			card_score += abs(card_health_gain) + card_money_gain
+			
+			# If the card heals the AI, avoid it completely (since healing should never be used on the AI)
+			if card_health_gain > 0 and use_on_self:
+				card_score = -1  # Don't select healing cards for the AI
+			
+			# Make sure the AI can handle the card in the given context (e.g., player node)
 			if not can_handle_card(card, get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target)))):
-				card_score = -1
+				card_score = -1  # Invalid card, don't select it
+			
+			# Now, if this card is better than the previous card in terms of score, select it
 			if card_score > card_to_use_score:
 				card_to_use = card
 				card_to_use_score = card_score
-				card_to_use_target = get_real_target(use_on_self,priority_target, secondary_target)
+				card_to_use_target = get_real_target(use_on_self, priority_target, secondary_target)
 
-			print("-----card------")
-			print("CARD NAME: ", card.name_of_card)
-			print("card info: ", card_info)
-			print("card score: ", card_score)
-			print("use on self: ", use_on_self)
-			print("-----ENDcard------")
 	if card_to_use:
 		print("---------")
 		print("current_player: ", current_player)
+		print("card_to_use_score ", card_to_use_score)
+		print("card to use: ", card_to_use)
+		print("card to use: ", card_to_use.get_parent().get_parent())
 		print("card to use: ", card_to_use.name_of_card)
 		print("target ", card_to_use_target)
 		print("---------")
-		#get_player_node(players.find(card_to_use_target)).get_node("Hand").player_hand.erase(card_to_use)
-		#card_to_use.get_parent().remove_card_from_hand(card_to_use, $"../CardManager".FINISH_DRAG_SPEED)
-		card_to_use.get_parent().remove_card_from_hand(card_to_use, $"../CardManager".FINISH_DRAG_SPEED)
-		card_to_use.queue_free()
-		#handle_card(card_to_use, get_player_node(players.find(card_to_use_target)))
 		
-		#IA_decision()
+		handle_card(card_to_use, get_player_node(players.find(card_to_use_target)))
+		print("CARD GLOBAL POSITION", card_to_use.global_position)
+		await get_tree().create_timer(2).timeout
+		IA_decision()
 	else:
 		next_turn(current_turn + 1)
 
@@ -277,17 +293,20 @@ func handle_card(card, target_player):
 	if not card_slot_found:
 		#HANDLE SPELLS AND SPECIALS
 		resolve_card_cost_health_money(card, target_player, card.get_parent().get_parent(), $"../Deck".get_card_info(card.name_of_card))
+		card.get_parent().remove_card_from_hand(card, $"../CardManager".FINISH_DRAG_SPEED)
 		card.queue_free()
 			
 	elif card_slot_found.cards_in_slot.size()<$"../CardManager".MAX_CARDS_IN_SLOT:
-		print("CARD_SLOT_POSITION: ", card_slot_found.global_position)
-		print("CARDS_IN_SLOT ",card_slot_found.cards_in_slot)
-		
+			
 		resolve_card_cost_health_money(card, target_player, card.get_parent().get_parent(), $"../Deck".get_card_info(card.name_of_card))
+		print("REMOVING?")
+		card.get_parent().remove_card_from_hand(card, $"../CardManager".FINISH_DRAG_SPEED)
 		
-		print("CARDS_IN_SLOT ",card_slot_found.cards_in_slot)
+		print("REMOVED?")
 		card.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
 		var displacement = card_slot_found.cards_in_slot.size() * $"../CardManager".SUBSEQUENT_CARD_DISPLACEMENT.rotated(card.rotation)
+		print("CARD_SLOT_GLOBAL_POS: ", card_slot_found.global_position)
+		card.card_position = card_slot_found.global_position + displacement
 		card.global_position = card_slot_found.global_position + displacement
 		card.card_slot_of_card = card_slot_found
 		card_slot_found.cards_in_slot.append(card)
@@ -299,15 +318,12 @@ func handle_card(card, target_player):
 		card.get_node("Area2D/CollisionShape2D").disabled = true
 			
 func resolve_card_cost_health_money(card, target_player, casting_player, card_info):
-	$"../PlayerManager".set_stats(
+	set_stats(
 	casting_player,
 	-card_info[1],
 	0) 
  #Apply card effects
-	$"../PlayerManager".set_stats(
+	set_stats(
 		target_player,
 		card_info[2],
 		card_info[3])
-	
-	if get_player_card_slot(card, target_player):
-		print("CARDS_IN_SLOT ",get_player_card_slot(card, target_player).cards_in_slot)
