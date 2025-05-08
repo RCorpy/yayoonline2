@@ -30,6 +30,7 @@ func add_card_to_hand(card, speed):
 		animate_card_to_position(card, card.card_position, speed)
 	
 func update_hand_positions(speed):
+	print("UPDATING HAND_POSITIONS")
 	for i in range(player_hand.size()):
 		var new_position = calculate_card_position(i)
 		var card = player_hand[i]
@@ -50,6 +51,8 @@ func animate_card_to_position(card, position, speed):
 	tween.tween_property(card, "position", position, speed)
 
 func remove_card_from_hand(card, speed):
+	print("CARDS BEFORE: ", player_hand)
 	if card in player_hand:
 		player_hand.erase(card)
 		update_hand_positions(speed)
+	print("CARDS AFTER: ", player_hand)
