@@ -65,6 +65,7 @@ func finish_drag():
 			if not card_slot_found:
 				#HANDLE SPELLS AND SPECIALS
 				resolve_card_cost_health_money(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card))
+				resolve_card_effects(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card)[4])
 				card_being_dragged.queue_free()
 				
 			elif card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT and not is_protected(player_found , card_being_dragged):
@@ -124,6 +125,43 @@ func resolve_card_cost_health_money(target_player, casting_player, card_info):
 		card_info[3])
 	card_being_dragged.get_parent().remove_card_from_hand(card_being_dragged, FINISH_DRAG_SPEED)
 
+func resolve_card_effects(target_player, current_player, effect):
+	print("target_player ", target_player)
+	print("current_player ", current_player)
+	print("effect ", effect)
+	if effect:
+		if effect.split(" ")[0]=="eliminar":
+			for node in target_player.get_node("CardSlots").get_children():
+				if node.card_slot_type == effect.split(" ")[1]:
+					if node.cards_in_slot.size()>0:
+						var card_ref = node.cards_in_slot[-1]
+						card_ref.queue_free()
+						node.cards_in_slot.erase(card_ref)
+		elif effect.split(" ")[0]=="transferir":
+			var max_spots_available
+			var target_card_slot
+			for node in target_player.get_node("CardSlots").get_children():
+				if node.card_slot_type == effect.split(" ")[1]:
+					max_spots_available = MAX_CARDS_IN_SLOT-node.cards_in_slot.size()
+					target_card_slot = node
+					
+			for node in current_player.get_node("CardSlots").get_children():
+				if node.card_slot_type == effect.split(" ")[1]:
+					if node.cards_in_slot.size()>0:
+						var amount_cards_to_pass = min(node.cards_in_slot.size(), max_spots_available)
+						for card_number in range(amount_cards_to_pass):
+							var this_card = node.cards_in_slot[-1] #maybe i need -card_number too
+							#remove from slot, then add to target card_slot
+							node.cards_in_slot.erase(this_card)
+							
+							this_card.rotation = target_card_slot.rotation + target_card_slot.get_parent().rotation
+							var displacement = target_card_slot.cards_in_slot.size() * SUBSEQUENT_CARD_DISPLACEMENT.rotated(this_card.rotation)
+							this_card.global_position = target_card_slot.global_position + displacement
+							this_card.card_slot_of_card = target_card_slot
+							target_card_slot.cards_in_slot.append(this_card)
+				
+				card_being_dragged.scale = Vector2(CARD_ON_SLOT_SCALE, CARD_ON_SLOT_SCALE)
+							
 func raycast_for_player_area():
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()

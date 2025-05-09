@@ -19,8 +19,8 @@ func draw_card(player_parent_node):
 	var card_draw_name = player_deck[0]
 	player_deck.erase(card_draw_name)
 	
-	if player_deck.size() == 0:
-		player_deck = card_databaseref.FULL_DECK
+	if player_deck.size() <= 0:
+		player_deck = card_databaseref.FULL_DECK.duplicate()
 		
 	var card_scene = preload(CARD_SCENE_PATH)
 	var new_card = card_scene.instantiate()

@@ -1,9 +1,9 @@
 extends Node2D
 
-var PlayerHealth = 5
-var Opponent1Health = 5
-var Opponent2Health = 5
-var Opponent3Health = 5
+var PlayerHealth = 10
+var Opponent1Health = 10
+var Opponent2Health = 10
+var Opponent3Health = 10
 
 var PlayerCoins = 2
 var Opponent1Coins = 2
@@ -18,6 +18,7 @@ var local_player_index
 var character_skills
 	#loading enriqueta by default now
 const character_skills_ref = preload("res://card_effects/ENRIQUETA.gd")
+const IA_WAIT_TIME = 2 #WTF si lo cambio a mas o menos empiezan a salir errores de posicionamientos
 
 func _ready():
 	character_skills = character_skills_ref.new()
@@ -59,8 +60,8 @@ func next_turn(turn):
 		$"../EndTurnButton".disabled = false
 	else:
 		$"../EndTurnButton".disabled = true
-		if current_player.left(2)=="IA":
-			await get_tree().create_timer(1).timeout
+		if current_player.left(2)=="IA" and current_player.length() == 3:
+			await get_tree().create_timer(IA_WAIT_TIME).timeout
 			IA_decision()
 			
 
@@ -162,7 +163,8 @@ func player_win_screen(player):
 
 
 func IA_decision():
-	
+	if current_player.length() != 3:
+		return
 	var my_coins = get_stats(get_player_node(current_player_index))[0]
 	var my_health = get_stats(get_player_node(current_player_index))[1]
 
@@ -210,10 +212,12 @@ func IA_decision():
 			var card_score = 1
 			var use_on_self = card_health_gain < 0
 			
-			# If the card is a "propiedad", prioritize it (it seems like a special case)
+			# If the card is a "propiedad", prioritize it 
 			if card_type == "propiedad":
-				card_score += 15
-				use_on_self = true  # Since propiedades seem to be prioritized for the AI
+				card_score = 15
+				use_on_self = true
+				priority_target = current_player
+				secondary_target = current_player
 			
 			# If the card has no health gain but provides money, AI might use it on itself
 			if card_health_gain == 0 and card_money_gain > 0:
@@ -261,7 +265,7 @@ func IA_decision():
 		
 		handle_card(card_to_use, get_player_node(players.find(card_to_use_target)))
 		print("CARD GLOBAL POSITION", card_to_use.global_position)
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(IA_WAIT_TIME).timeout
 		IA_decision()
 	else:
 		next_turn(current_turn + 1)
@@ -292,7 +296,7 @@ func can_handle_card(card, target_player):
 	return false
 
 func handle_card(card, target_player):
-	print("CARD_POSITION: ", card.global_position)
+
 	var card_slot_found = get_player_card_slot(card, target_player)
 	
 	if not card_slot_found:
@@ -304,16 +308,15 @@ func handle_card(card, target_player):
 	elif card_slot_found.cards_in_slot.size()<$"../CardManager".MAX_CARDS_IN_SLOT:
 			
 		resolve_card_cost_health_money(card, target_player, card.get_parent().get_parent(), $"../Deck".get_card_info(card.name_of_card))
-		print("REMOVING?")
-		card.get_parent().remove_card_from_hand(card, $"../CardManager".FINISH_DRAG_SPEED)
+
 		
-		print("REMOVED?")
+
 		card.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
 		var displacement = card_slot_found.cards_in_slot.size() * $"../CardManager".SUBSEQUENT_CARD_DISPLACEMENT.rotated(card.rotation)
-		print("CARD_SLOT_GLOBAL_POS: ", card_slot_found.global_position)
 		card.card_position = card_slot_found.global_position + displacement
 		card.global_position = card_slot_found.global_position + displacement
 		card.card_slot_of_card = card_slot_found
+		card.get_parent().remove_card_from_hand(card, $"../CardManager".FINISH_DRAG_SPEED)
 		card_slot_found.cards_in_slot.append(card)
 		
 		card.scale = Vector2($"../CardManager".CARD_ON_SLOT_SCALE, $"../CardManager".CARD_ON_SLOT_SCALE)

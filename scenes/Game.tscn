@@ -169,6 +169,7 @@ horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Hand" type="Node2D" parent="GameContainer/Player"]
+position = Vector2(987, 970)
 script = ExtResource("5_r0x5m")
 
 [node name="HighlightRect" type="ColorRect" parent="GameContainer/Player"]
