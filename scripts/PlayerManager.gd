@@ -238,6 +238,11 @@ func IA_decision():
 			if not can_handle_card(card, get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target)))):
 				card_score = -1  # Invalid card, don't select it
 			
+			#Objective might be protected
+			if card_type == "nieto" or card_type == "planta" or card_type == "mascota":
+				if is_protected(get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target))), card):
+					card_score = -1  # Invalid card, don't select it
+				
 			# Now, if this card is better than the previous card in terms of score, select it
 			if card_score > card_to_use_score:
 				card_to_use = card
@@ -327,3 +332,14 @@ func resolve_card_cost_health_money(card, target_player, casting_player, card_in
 		target_player,
 		card_info[2],
 		card_info[3])
+
+func is_protected(player_node , card_being_dragged):
+	var card_slot_nodes = player_node.get_node("CardSlots").get_children()
+	for card_slot_node in card_slot_nodes:
+		for card in card_slot_node.cards_in_slot:
+			
+			var effect = $"../Deck".get_card_info(card.name_of_card)[4]
+			print("effect", effect)
+			if effect and effect.split(" ")[0]=="proteger" and effect.split(" ")[1] == card_being_dragged.card_type:
+				return true
+	return false

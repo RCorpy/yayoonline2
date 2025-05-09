@@ -1,6 +1,6 @@
 extends Node2D
 
-const HAND_COUNT = 5
+const HAND_COUNT = 15
 const CARD_WIDTH = 160
 const HAND_Y_POSITION = 970
 const X_HAND_OFFSET_VAR = 0.01

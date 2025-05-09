@@ -67,7 +67,7 @@ func finish_drag():
 				resolve_card_cost_health_money(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card))
 				card_being_dragged.queue_free()
 				
-			elif card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT:
+			elif card_slot_found.cards_in_slot.size()<MAX_CARDS_IN_SLOT and not is_protected(player_found , card_being_dragged):
 				resolve_card_cost_health_money(player_found, card_being_dragged.get_parent().get_parent(), $"../Deck".get_card_info(card_being_dragged.name_of_card))
 				
 				card_being_dragged.rotation = card_slot_found.rotation + card_slot_found.get_parent().rotation
@@ -88,6 +88,17 @@ func finish_drag():
 	else:
 		card_being_dragged.get_parent().add_card_to_hand(card_being_dragged, FINISH_DRAG_SPEED)
 	card_being_dragged = null
+
+func is_protected(player_node , card_being_dragged):
+	var card_slot_nodes = player_node.get_node("CardSlots").get_children()
+	for card_slot_node in card_slot_nodes:
+		for card in card_slot_node.cards_in_slot:
+			
+			var effect = $"../Deck".get_card_info(card.name_of_card)[4]
+			print("effect", effect)
+			if effect and effect.split(" ")[0]=="proteger" and effect.split(" ")[1] == card_being_dragged.card_type:
+				return true
+	return false
 
 func get_player_card_slot(player):
 	for node in player.get_node("CardSlots").get_children():

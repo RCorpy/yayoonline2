@@ -84,7 +84,7 @@ offset_bottom = 479.0
 text = "Kick AFKs"
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 30.0
 one_shot = true
 
 [node name="GameContainer" type="Node2D" parent="."]
