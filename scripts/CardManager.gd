@@ -25,7 +25,7 @@ func _ready():
 func _process(delta):
 	if card_being_dragged:
 		var mouse_position = get_global_mouse_position()
-		card_being_dragged.position = Vector2(
+		card_being_dragged.global_position = Vector2(
 			clamp(mouse_position.x, 0, screen_size.x), 
 			clamp(mouse_position.y, 0, screen_size.y)
 		)
@@ -46,6 +46,7 @@ func _process(delta):
 func start_drag(card):
 	card.scale=Vector2(DEFAULT_CARD_SCALE,DEFAULT_CARD_SCALE)
 	card_being_dragged = card
+
 
 
 func finish_drag():

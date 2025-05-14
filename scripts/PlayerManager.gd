@@ -10,6 +10,7 @@ var Opponent1Coins = 2
 var Opponent2Coins = 2
 var Opponent3Coins = 2
 
+var winner
 var players
 var current_turn
 var current_player
@@ -46,8 +47,8 @@ func next_turn(turn):
 		character_skills.character_ability(self)
 		#EVENT CARD TIME
 		pass
-	
-	$TurnTimer.start()
+	if not winner:
+		$TurnTimer.start()
 	if current_turn != 0:
 		var turn_player_node = get_player_node(current_turn % players.size() - local_player_index)
 		#draw a card
@@ -60,7 +61,7 @@ func next_turn(turn):
 		$"../EndTurnButton".disabled = false
 	else:
 		$"../EndTurnButton".disabled = true
-		if current_player.left(2)=="IA" and current_player.length() == 3:
+		if current_player.left(2)=="IA" and current_player.length() == 3 and not winner:
 			await get_tree().create_timer(IA_WAIT_TIME).timeout
 			IA_decision()
 			
@@ -110,7 +111,6 @@ func set_stats(player_node, amount_money ,amount_health ):
 			print("unknown player")
 	update_values()
 	if get_stats(player_node)[1] <= 0:
-		print(get_player_from_node(player_node.name) , " WON THE GAME")
 		player_win_screen(get_player_from_node(player_node.name))
 
 func get_stats(parent_node):
@@ -140,7 +140,6 @@ func _on_turn_timer_timeout():
 		next_turn(current_turn + 1)
 		
 func is_local_player_turn():
-	print("its local?", FirebaseData.player_id == current_player, "    ", current_player, "   ", FirebaseData.player_id )
 	return FirebaseData.player_id == current_player
 
 func get_player_from_node(node):
@@ -157,118 +156,120 @@ func get_player_from_node(node):
 			print("unknown player")
 
 func player_win_screen(player):
-	$"../WinScreen".visible = true
+	$"../EndGamePopUp".visible = true
 	$TurnTimer.stop()
 	$"../EndTurnButton".disabled = true
-
+	$"../EndGamePopUp/Container/EndGame Button".disabled = false
+	print("comparing", player, players[local_player_index])
+	if player == players[local_player_index]:
+		$"../EndGamePopUp/Container/EndGameText".text = "Congratulations, you won!"
+	else:
+		$"../EndGamePopUp/Container/EndGameText".text = "You lost, " + str(player) + " won"
 
 func IA_decision():
+	print("winner", winner)
 	if current_player.length() != 3:
 		return
-	var my_coins = get_stats(get_player_node(current_player_index))[0]
-	var my_health = get_stats(get_player_node(current_player_index))[1]
+	if not winner:
+		var my_coins = get_stats(get_player_node(current_player_index))[0]
+		var my_health = get_stats(get_player_node(current_player_index))[1]
 
-	var opponent_healths = []
-	
-	for enemy_index in range(players.size()):
-		var next_player_in_order = (current_player_index+enemy_index)%players.size()
-		if not next_player_in_order == current_player_index:
-			opponent_healths+= [[players[next_player_in_order], get_stats(get_player_node(next_player_in_order))[1]]]
-	var cards = get_player_node(current_player_index).get_node("Hand").player_hand
-	print(opponent_healths)
-	var card_to_use
-	var card_to_use_score = 0
-	var card_to_use_cost
-	var card_to_use_type 
-	var card_to_use_money_gain
-	var card_to_use_target
-	var card_to_use_health_gain
-	var priority_target = null
-	var secondary_target = current_player
-	
-	if my_health <= 2:
-		priority_target = current_player
+		var opponent_healths = []
 		
-	for opponent in opponent_healths:
+		for enemy_index in range(players.size()):
+			var next_player_in_order = (current_player_index+enemy_index)%players.size()
+			if not next_player_in_order == current_player_index:
+				opponent_healths+= [[players[next_player_in_order], get_stats(get_player_node(next_player_in_order))[1]]]
+		var cards = get_player_node(current_player_index).get_node("Hand").player_hand
+
+		var card_to_use
+		var card_to_use_score = 0
+		var card_to_use_type 
+		var card_to_use_target
+		var card_to_use_health_gain
+		var priority_target = null
+		var secondary_target = current_player
+		
+		if my_health <= 2:
+			priority_target = current_player
+			
+		for opponent in opponent_healths:
+			if not priority_target:
+				if opponent[1] <= 2:
+					priority_target = opponent[0]
+		
 		if not priority_target:
-			if opponent[1] <= 2:
-				priority_target = opponent[0]
-	
-	if not priority_target:
-		priority_target = current_player
-		secondary_target = opponent_healths[0][0]
-	
-	print("prio: ", priority_target)
-	print("secondary prio: ", secondary_target)
-	
-	for card in cards:
-		var card_info = $"../Deck".get_card_info(card.name_of_card)
+			priority_target = current_player
+			secondary_target = opponent_healths[0][0]
 		
-		if card_info[1] <= my_coins:  # Check if the AI can afford the card
-			var card_type = card_info[0]
-			var card_cost = card_info[1]
-			var card_money_gain = card_info[2]
-			var card_health_gain = card_info[3]
-			var card_score = 1
-			var use_on_self = card_health_gain < 0
+		for card in cards:
+			var card_info = $"../Deck".get_card_info(card.name_of_card)
 			
-			# If the card is a "propiedad", prioritize it 
-			if card_type == "propiedad":
-				card_score = 15
-				use_on_self = true
-				priority_target = current_player
-				secondary_target = current_player
-			
-			# If the card has no health gain but provides money, AI might use it on itself
-			if card_health_gain == 0 and card_money_gain > 0:
-				use_on_self = true
+			if card_info[1] <= my_coins:  # Check if the AI can afford the card
+				var card_type = card_info[0]
+				var card_cost = card_info[1]
+				var card_money_gain = card_info[2]
+				var card_health_gain = card_info[3]
+				var card_score = 1
+				var use_on_self = card_health_gain < 0
+				
+				# If the card is a "propiedad", prioritize it 
+				if card_type == "propiedad":
+					card_score = 15
+					use_on_self = true
+					priority_target = current_player
+					secondary_target = current_player
+				
+				# If the card has no health gain but provides money, AI might use it on itself
+				if card_health_gain == 0 and card_money_gain > 0:
+					use_on_self = true
 
-			# Prioritize using on the AI if the card heals or benefits it and priority_target is the AI
-			if use_on_self and priority_target == current_player:
-				card_score += 5
-			
-			# If the card doesn't benefit the AI but helps the opponent, prioritize if the target is not the AI
-			if not use_on_self and priority_target != current_player:
-				card_score += 5
-			
-			# Add the card's health and money gain values to the score
-			card_score += abs(card_health_gain) + card_money_gain
-			
-			# If the card heals the AI, avoid it completely (since healing should never be used on the AI)
-			if card_health_gain > 0 and use_on_self:
-				card_score = -1  # Don't select healing cards for the AI
-			
-			# Make sure the AI can handle the card in the given context (e.g., player node)
-			if not can_handle_card(card, get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target)))):
-				card_score = -1  # Invalid card, don't select it
-			
-			#Objective might be protected
-			if card_type == "nieto" or card_type == "planta" or card_type == "mascota":
-				if is_protected(get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target))), card):
+				# Prioritize using on the AI if the card heals or benefits it and priority_target is the AI
+				if use_on_self and priority_target == current_player:
+					card_score += 5
+				
+				# If the card doesn't benefit the AI but helps the opponent, prioritize if the target is not the AI
+				if not use_on_self and priority_target != current_player:
+					card_score += 5
+				
+				# Add the card's health and money gain values to the score
+				card_score += abs(card_health_gain) + card_money_gain
+				
+				# If the card heals the AI, avoid it completely (since healing should never be used on the AI)
+				if card_health_gain > 0 and use_on_self:
+					card_score = -1  # Don't select healing cards for the AI
+				
+				# Make sure the AI can handle the card in the given context (e.g., player node)
+				if not can_handle_card(card, get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target)))):
 					card_score = -1  # Invalid card, don't select it
 				
-			# Now, if this card is better than the previous card in terms of score, select it
-			if card_score > card_to_use_score:
-				card_to_use = card
-				card_to_use_score = card_score
-				card_to_use_target = get_real_target(use_on_self, priority_target, secondary_target)
+				#Objective might be protected
+				if card_type == "nieto" or card_type == "planta" or card_type == "mascota":
+					if is_protected(get_player_node(players.find(get_real_target(use_on_self, priority_target, secondary_target))), card):
+						card_score = -1  # Invalid card, don't select it
+					
+				# Now, if this card is better than the previous card in terms of score, select it
+				if card_score > card_to_use_score:
+					card_to_use = card
+					card_to_use_score = card_score
+					card_to_use_target = get_real_target(use_on_self, priority_target, secondary_target)
 
-	if card_to_use:
-		print("---------")
-		print("current_player: ", current_player)
-		print("card_to_use_score ", card_to_use_score)
-		print("card to use: ", card_to_use)
-		print("card to use: ", card_to_use.get_parent().get_parent())
-		print("card to use: ", card_to_use.name_of_card)
-		print("target ", card_to_use_target)
-		print("---------")
-		
-		handle_card(card_to_use, get_player_node(players.find(card_to_use_target)))
-		print("CARD GLOBAL POSITION", card_to_use.global_position)
-		await get_tree().create_timer(IA_WAIT_TIME).timeout
-		IA_decision()
-	else:
-		next_turn(current_turn + 1)
+		if card_to_use:
+			#print("---------")
+			#print("current_player: ", current_player)
+			#print("card_to_use_score ", card_to_use_score)
+			#print("card to use: ", card_to_use)
+			#print("card to use: ", card_to_use.get_parent().get_parent())
+			#print("card to use: ", card_to_use.name_of_card)
+			#print("target ", card_to_use_target)
+			#print("---------")
+			
+			handle_card(card_to_use, get_player_node(players.find(card_to_use_target)))
+
+			await get_tree().create_timer(IA_WAIT_TIME).timeout
+			IA_decision()
+		else:
+			next_turn(current_turn + 1)
 
 
 func get_real_target(use_on_self, priority_target, secondary_target):
@@ -330,11 +331,14 @@ func resolve_card_cost_health_money(card, target_player, casting_player, card_in
 	casting_player,
 	-card_info[1],
 	0) 
- #Apply card effects
 	set_stats(
 		target_player,
 		card_info[2],
-		card_info[3])
+		card_info[3]
+		)
+		
+	if get_stats(target_player)[1] <= 0:
+		winner = str(get_player_from_node(target_player))
 
 func is_protected(player_node , card_being_dragged):
 	var card_slot_nodes = player_node.get_node("CardSlots").get_children()
@@ -342,7 +346,7 @@ func is_protected(player_node , card_being_dragged):
 		for card in card_slot_node.cards_in_slot:
 			
 			var effect = $"../Deck".get_card_info(card.name_of_card)[4]
-			print("effect", effect)
+
 			if effect and effect.split(" ")[0]=="proteger" and effect.split(" ")[1] == card_being_dragged.card_type:
 				return true
 	return false
