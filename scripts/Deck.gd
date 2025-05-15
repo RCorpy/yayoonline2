@@ -6,13 +6,16 @@ var card_databaseref
 const CARD_SCENE_PATH = "res://scenes/Card.tscn"
 const CARD_DRAW_SPEED = 0.2
 
-
+var event_deck
 
 func _ready():
 	card_databaseref = preload("res://scripts/CardDataBase.gd")
 
 	player_deck = card_databaseref.FULL_DECK.duplicate()
 	player_deck.shuffle()
+	
+	event_deck = card_databaseref.EVENT_DECK.duplicate()
+	event_deck.shuffle()
 
 func draw_card(player_parent_node):
 	var card_draw_name = player_deck[0]

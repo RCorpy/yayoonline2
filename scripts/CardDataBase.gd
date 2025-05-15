@@ -99,6 +99,28 @@ const CARDS = {			 #type,	price,+money, +health, effect
 	"PLANTA_MARGARITA":	["planta", 0, 0, 1, null],
 	"PLANTA_FLOR_DE_PLASTICO":	["planta", 0, 0, 1, null],
 	"PLANTA_CARNIVORA":	["planta", 0, 0, 1, "proteger mascota"], #proteccion contra mascotas
+	
+	#nombre -> [color]
+	
+	"PLAGA_DE_PULGAS":["azul"],
+	"EMAIL_PRINCIPE_NIGERIANO":["azul"],
+	"INUNDACION":["azul"],
+	"MODERNIZACION":["azul"],
+	"BLACK_FRIDAY":["azul"],
+	"VIRUS_ANIMAL":["azul"],
+	"CONCURSO_BELLEZA_CANINA":["azul"],
+	"INCENDIO_FORESTAL":["azul"],
+	"EXTRATERRESTRES":["azul"],
+	"NIETOS_DE_ERASMUS":["azul"],
+	"HACK_ATTACK":["azul"],
+	"EUROMILLONES":["azul"],
+	"CLASE_DE_YOGA":["azul"],
+	"GUARDERIAS":["azul"],
+	"OLA_DE_CALOR":["azul"],
+	"VISION_FUTURA":["azul"],
+	"NAVIDAD":["azul"],
+	"TERREMOTO":["azul"],
+	"RAYOS_X":["azul"]
 }
 
 const TEST_DECK = [
@@ -226,3 +248,25 @@ const FULL_DECK = [
 	"PLANTA_FLOR_DE_PLASTICO",
 	"PLANTA_CARNIVORA" #proteccion contra mascotas
 	]
+
+const EVENT_DECK = [
+	"PLAGA_DE_PULGAS", #El jugador con mas mascotas pierde su mano
+	"EMAIL_PRINCIPE_NIGERIANO", #Email principe nigeriano, -2UPS todos
+	"INUNDACION", #Terrenos a la mierda
+	"MODERNIZACION", #Robar 2 cartas
+	"BLACK_FRIDAY", #Todo cuesta 1 Up menos
+	"VIRUS_ANIMAL", #Perder 1 EV por cada mascota (descartar todas las mascotas)
+	"CONCURSO_BELLEZA_CANINA", #Por cada mascota se pierde 1 UP
+	"INCENDIO_FORESTAL", #El jugador con mas plantas pierde su mano y sus plantas
+	"EXTRATERRESTRES", #Eliminar nietos mascotas y plantas
+	"NIETOS_DE_ERASMUS", #-1 UP por nieto
+	"HACK_ATTACK", #Rotar manos
+	"EUROMILLONES", #mas 2UP todos
+	"CLASE_DE_YOGA", #El jugador con menos EV pierde turno (no gana UPS y no pierde EVS)
+	"GUARDERIAS", #suben precio +1 up por nieto
+	"OLA_DE_CALOR", #Perder 1 EV por cada planta
+	"VISION_FUTURA", #Se da la vuelta a los proximos 2 eventos globales
+	"NAVIDAD", #Roba una carta extra por cada nieto que tengas
+	"TERREMOTO", #Todas las manos van al descarte. Cada uno roba 4 cartas y pierden 3 UPS (pierden terrenos)
+	"RAYOS_X" #Se destapan las manos (durante toda la ronda)
+]
