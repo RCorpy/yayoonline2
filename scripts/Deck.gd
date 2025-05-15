@@ -13,7 +13,6 @@ func _ready():
 
 	player_deck = card_databaseref.FULL_DECK.duplicate()
 	player_deck.shuffle()
-	print(player_deck)
 
 func draw_card(player_parent_node):
 	var card_draw_name = player_deck[0]

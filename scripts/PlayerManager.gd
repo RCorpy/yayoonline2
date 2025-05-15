@@ -12,6 +12,8 @@ var Opponent3Coins = 2
 
 var winner
 var players
+var characters
+var character_list = ["ENRIQUETA", "GERTRUDIS", "GREGORIO", "JEREMIAS", "LIBERTO", "URSULA"]
 var current_turn
 var current_player
 var current_player_index
@@ -26,10 +28,13 @@ func _ready():
 	
 	if FirebaseData.playing_IA:
 		players = [FirebaseData.player_id, "IA1", "IA2", "IA3"]
+		character_list.shuffle()
+		characters = character_list.slice(0,4)	
 	else:
 		#get all the players, order them
 		players = [FirebaseData.player_id]
 	local_player_index = players.find(FirebaseData.player_id)
+	get_characterSprite_images()
 	next_turn(0)
 	update_values()
 
@@ -37,19 +42,58 @@ func _ready():
 func works():
 	print("it does work")
 
+func get_characterSprite_images():	
+	$"../Player".get_node("CharacterSprite").texture= load(str("res://assets/"+ characters[0] +"_PER.png"))
+	$"../Opponent1".get_node("CharacterSprite").texture= load(str("res://assets/"+ characters[1] +"_PER.png"))
+	$"../Opponent2".get_node("CharacterSprite").texture= load(str("res://assets/"+ characters[2] +"_PER.png"))
+	$"../Opponent3".get_node("CharacterSprite").texture= load(str("res://assets/"+ characters[3] +"_PER.png"))
+
+func end_turn_character_skill_activates():
+	var ended_turn_char = characters[current_player_index]
+	
+	match ended_turn_char:
+
+		"LIBERTO": #si te quedas sin cartas en la mano, robas
+			if get_player_node(current_player_index).get_node("Hand").player_hand.size() ==0:
+				$"../Deck".draw_card(get_player_node(current_player_index))
+		_:
+			pass
+
+func start_turn_character_skill_activates():
+	var start_turn_char = characters[current_player_index]
+	
+	match start_turn_char:
+		"ENRIQUETA":# si tienes 5 cartas o mas en la mano, pierdes 1 de vida
+			if get_player_node(current_player_index).get_node("Hand").player_hand.size() >=5:
+				set_stats(get_player_node(current_player_index), 0 ,-1 )
+		"GREGORIO": #ganas +1 dinero por turno
+			set_stats(get_player_node(current_player_index), 1 , 0 )
+		"URSULA": # si puedes pagar 1 moneda, la pagas y robas
+			if get_stats(get_player_node(current_player_index))[1] >1:
+				set_stats(get_player_node(current_player_index), -1 ,0)
+				$"../Deck".draw_card(get_player_node(current_player_index))
+		"GERTRUDIS": #ESTA SKILL ESTA EN func set_stats()
+			pass	
+		"JEREMIAS": #NO IMPLEMENTADO, ESTARA EN LA FUNCION DE EVENTOS Y SUS COLORES
+			pass
+		_:
+			pass
 func next_turn(turn):
+	if current_player_index and current_player:
+		end_turn_character_skill_activates()
 	
 	current_turn = turn
 	current_player_index = current_turn % players.size()
 	current_player = players[current_player_index]
+		
 	
 	if current_turn % players.size() == 0:
-		character_skills.character_ability(self)
 		#EVENT CARD TIME
 		pass
 	if not winner:
 		$TurnTimer.start()
 	if current_turn != 0:
+		start_turn_character_skill_activates()
 		var turn_player_node = get_player_node(current_turn % players.size() - local_player_index)
 		#draw a card
 		$"../Deck".draw_card(turn_player_node)
@@ -112,6 +156,10 @@ func set_stats(player_node, amount_money ,amount_health ):
 	update_values()
 	if get_stats(player_node)[1] <= 0:
 		player_win_screen(get_player_from_node(player_node.name))
+		
+	#GERTRUDIS CHARACTER SKILL
+	if amount_health >0 and characters[players.find(get_player_from_node(player_node.name))]== "GERTRUDIS":
+		$"../Deck".draw_card(player_node)
 
 func get_stats(parent_node):
 	var player = parent_node.name
