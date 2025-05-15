@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://wxqii62b2lng"]
+[gd_scene load_steps=22 format=3 uid="uid://wxqii62b2lng"]
 
 [ext_resource type="Script" uid="uid://d255l710kfrff" path="res://scripts/Game.gd" id="1_wbfu4"]
 [ext_resource type="Script" uid="uid://cw6lr3b1af08e" path="res://scripts/PlayerManager.gd" id="2_g4kob"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://c4ddc367en6mk" path="res://scripts/OpponentHand.gd" id="8_400sg"]
 [ext_resource type="Texture2D" uid="uid://bwt1kxwwu26jd" path="res://assets/Coins.png" id="8_mcffj"]
 [ext_resource type="Texture2D" uid="uid://cpemlxdjlu5xp" path="res://assets/FlameDemon.png" id="12_mcffj"]
+[ext_resource type="Texture2D" uid="uid://cgcy56x46884h" path="res://assets/CardSlot.png" id="14_7ua8r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkndl"]
 bg_color = Color(0.202795, 0.719399, 0, 1)
@@ -549,6 +550,13 @@ theme_override_font_sizes/font_size = 35
 disabled = true
 text = "Nice Game
 "
+
+[node name="EventCardSlot" type="Node2D" parent="GameContainer"]
+position = Vector2(754, 501)
+
+[node name="EventSprite" type="Sprite2D" parent="GameContainer/EventCardSlot"]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("14_7ua8r")
 
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="Container/LeaveRoomButton" to="." method="_on_leave_room_button_pressed"]

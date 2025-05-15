@@ -1,11 +1,11 @@
 const CARDS = {			 #type,	price,+money, +health, effect
-	"ANGUSTIAS_PER": 	["nieto",	1,	1,	-1, null],
-	"ENRIQUETA_PER":	["nieto",	0,	1,	-1, null],
-	"GERTRUDIS_PER":	["planta",	0,	1,	1, null],
-	"GREGORIO_PER":		["planta",	0,	1,	1, null],
-	"JEREMIAS_PER":		["planta",	0,	1,	1, null],
-	"LIBERTO_PER":		["mascota",	0,	1,	0, null],
-	"URSULA_PER":		["mascota",	0,	1,	0, null],
+	"ANGUSTIAS": 	["azul",	1,	1,	-1, null],
+	"ENRIQUETA":	["azul",	0,	1,	-1, null],
+	"GERTRUDIS":	["verde",	0,	1,	1, null],
+	"GREGORIO":		["verde",	0,	1,	1, null],
+	"JEREMIAS":		["amarillo",	0,	1,	1, null],
+	"LIBERTO":		["rojo",	0,	1,	0, null],
+	"URSULA":		["rojo",	0,	1,	0, null],
 	
 	"DENTADURA_POSTIZA":	["spell", 1, 0, 1, null],
 	"BOINA":			["spell", 1, 0, 1, null],

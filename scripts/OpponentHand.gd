@@ -1,6 +1,6 @@
 extends Node2D
 
-const HAND_COUNT = 5
+const HAND_COUNT = 0
 const CARD_WIDTH = 80
 const X_HAND_OFFSET_VAR = 0.01
 const OPPONENT_HAND_SCALE = 0.5

@@ -10,7 +10,8 @@ var name_of_card
 var flipped = false
 
 func _ready():
-	get_parent().get_parent().get_parent().get_node("CardManager").connect_card_signals(self)
+	if not get_parent().name == "EventCardSlot":
+		get_parent().get_parent().get_parent().get_node("CardManager").connect_card_signals(self)
 
 func _on_area_2d_mouse_entered():
 	emit_signal("hovered", self)

@@ -87,12 +87,15 @@ func next_turn(turn):
 	current_player = players[current_player_index]
 		
 	
-	if current_turn % players.size() == 0:
-		#EVENT CARD TIME
-		pass
+
 	if not winner:
 		$TurnTimer.start()
 	if current_turn != 0:
+		if current_turn % players.size() == 0:
+			#EVENT CARD TIME
+			$"../Deck".draw_new_event()
+			
+			
 		start_turn_character_skill_activates()
 		var turn_player_node = get_player_node(current_turn % players.size() - local_player_index)
 		#draw a card
@@ -398,3 +401,8 @@ func is_protected(player_node , card_being_dragged):
 			if effect and effect.split(" ")[0]=="proteger" and effect.split(" ")[1] == card_being_dragged.card_type:
 				return true
 	return false
+
+func event_resolution(color):
+	for i in range(characters):
+		if color == $"../Deck".card_databaseref.CARDS[characters[i]][0]:
+			set_stats(get_player_node(i), 0, -1)
